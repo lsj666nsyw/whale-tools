@@ -137,6 +137,27 @@
   });
   $("img-q").oninput = function () { $("img-qv").textContent = this.value; };
 
+  // Logo 水印：选文件并预加载
+  var logoImg = null;
+  $("img-logobtn").onclick = function () { $("img-logofile").click(); };
+  $("img-logofile").onchange = function () {
+    var f = this.files[0];
+    if (!f) return;
+    var url = URL.createObjectURL(f);
+    var im = new Image();
+    im.onload = function () {
+      logoImg = im;
+      $("img-logolabel").textContent = f.name + "（" + im.naturalWidth + "×" + im.naturalHeight + "）";
+      $("img-logolabel").style.color = "#2fa360";
+      $("img-logo").checked = true;
+    };
+    im.onerror = function () {
+      $("img-logolabel").textContent = "这张图打不开";
+      $("img-logolabel").style.color = "#c04040";
+    };
+    im.src = url;
+  };
+
   function loadImage(file) {
     return new Promise(function (res, rej) {
       var url = URL.createObjectURL(file);
@@ -211,6 +232,120 @@
     return out.c;
   }
 
+  // ===================== 图片高级处理（对齐桌面专业版） =====================
+  /**
+   * 智能去白边：扫描四边，找出"几乎全为背景色"的行列并裁掉。
+   * 与桌面版同一套思路：逐行逐列统计背景像素占比，98% 以上算背景行。
+   */
+  function trimEdges(canvas, tolerance) {
+    var w = canvas.width, h = canvas.height;
+    if (w < 8 || h < 8) return canvas;
+    var ctx = canvas.getContext("2d");
+    var data = ctx.getImageData(0, 0, w, h).data;
+    var tol = Math.max(1, Math.round(tolerance * 2.55));
+
+    // 用四角平均色当背景色
+    function px(x, y) {
+      var i = (y * w + x) * 4;
+      return [data[i], data[i + 1], data[i + 2]];
+    }
+    var corners = [px(0, 0), px(w - 1, 0), px(0, h - 1), px(w - 1, h - 1)];
+    var bg = [0, 1, 2].map(function (k) {
+      return Math.round(corners.reduce(function (s, c) { return s + c[k]; }, 0) / 4);
+    });
+
+    function isBg(x, y) {
+      var i = (y * w + x) * 4;
+      return Math.abs(data[i] - bg[0]) <= tol &&
+        Math.abs(data[i + 1] - bg[1]) <= tol &&
+        Math.abs(data[i + 2] - bg[2]) <= tol;
+    }
+    var RATIO = 0.98;
+    function rowBg(y) {
+      var n = 0;
+      for (var x = 0; x < w; x++) if (isBg(x, y)) n++;
+      return n >= w * RATIO;
+    }
+    function colBg(x) {
+      var n = 0;
+      for (var y = 0; y < h; y++) if (isBg(x, y)) n++;
+      return n >= h * RATIO;
+    }
+    var top = 0;
+    while (top < h && rowBg(top)) top++;
+    var bottom = h;
+    while (bottom > top && rowBg(bottom - 1)) bottom--;
+    var left = 0;
+    while (left < w && colBg(left)) left++;
+    var right = w;
+    while (right > left && colBg(right - 1)) right--;
+
+    if (top === 0 && bottom === h && left === 0 && right === w) return canvas;
+    var nw = right - left, nh = bottom - top;
+    if (nw < 8 || nh < 8 || nw < w * 0.2 || nh < h * 0.2) return canvas;
+
+    var out = document.createElement("canvas");
+    out.width = nw; out.height = nh;
+    out.getContext("2d").drawImage(canvas, left, top, nw, nh, 0, 0, nw, nh);
+    return out;
+  }
+
+  /** 抠图：把接近背景色的像素变透明（输出必须 PNG/WEBP） */
+  function removeBg(canvas, tolerance) {
+    var w = canvas.width, h = canvas.height;
+    var ctx = canvas.getContext("2d");
+    var imgData = ctx.getImageData(0, 0, w, h);
+    var d = imgData.data;
+    var tol = Math.max(1, Math.round(tolerance * 2.55));
+    function px(x, y) {
+      var i = (y * w + x) * 4;
+      return [d[i], d[i + 1], d[i + 2]];
+    }
+    var corners = [px(0, 0), px(w - 1, 0), px(0, h - 1), px(w - 1, h - 1)];
+    var bg = [0, 1, 2].map(function (k) {
+      return Math.round(corners.reduce(function (s, c) { return s + c[k]; }, 0) / 4);
+    });
+    for (var i = 0; i < d.length; i += 4) {
+      if (Math.abs(d[i] - bg[0]) <= tol &&
+        Math.abs(d[i + 1] - bg[1]) <= tol &&
+        Math.abs(d[i + 2] - bg[2]) <= tol) {
+        d[i + 3] = 0;
+      }
+    }
+    ctx.putImageData(imgData, 0, 0);
+    return canvas;
+  }
+
+  /** 加纯色边框：widthPermille 相对短边千分比 */
+  function addBorder(canvas, widthPermille, color) {
+    var w = canvas.width, h = canvas.height;
+    var px = Math.max(1, Math.round(Math.min(w, h) * widthPermille / 1000));
+    if (px * 2 >= Math.min(w, h)) return canvas;
+    var out = document.createElement("canvas");
+    out.width = w + px * 2; out.height = h + px * 2;
+    var x = out.getContext("2d");
+    x.fillStyle = color;
+    x.fillRect(0, 0, out.width, out.height);
+    x.drawImage(canvas, px, px);
+    return out;
+  }
+
+  /** 贴 logo 水印：logoImg 已加载，scalePct 为占图片宽度百分比 */
+  function drawLogo(canvas, logoImg, pos, scalePct, opacity) {
+    var w = canvas.width, h = canvas.height;
+    var lw = Math.max(8, Math.round(w * scalePct / 100));
+    var lh = Math.round(logoImg.naturalHeight * (lw / logoImg.naturalWidth));
+    var m = Math.round(Math.min(w, h) * 0.03);
+    var x0 = pos[1] === "w" ? m : pos[1] === "e" ? w - lw - m : Math.round((w - lw) / 2);
+    var y0 = pos[0] === "n" ? m : pos[0] === "s" ? h - lh - m : Math.round((h - lh) / 2);
+    var ctx = canvas.getContext("2d");
+    ctx.save();
+    ctx.globalAlpha = Math.max(0.05, Math.min(1, opacity / 100));
+    ctx.drawImage(logoImg, x0, y0, lw, lh);
+    ctx.restore();
+    return canvas;
+  }
+
   function canvasToBlob(c, type, q) {
     return new Promise(function (res, rej) {
       c.toBlob(function (b) { b ? res(b) : rej(new Error("导出失败")); }, type, q);
@@ -242,14 +377,26 @@
       fh: +(($("img-h") || {}).value || 800),
       pct: +(($("img-pct") || {}).value || 50),
       square: $("img-sq").checked,
+      trim: $("img-trim").checked,
+      cut: $("img-cut").checked,
       watermark: $("img-wm").checked,
       wmText: $("img-wmt").value,
       wmPos: $("img-wmp").value,
+      logo: $("img-logo").checked,
+      logoPos: $("img-logopos").value,
+      border: $("img-bd").checked,
+      borderW: +$("img-bdw").value || 4,
+      borderC: $("img-bdc").value,
       fmt: $("img-fmt").value,
       q: +$("img-q").value,
       limit: $("img-lim").checked ? (+$("img-kb").value || 200) * 1024 : 0,
     };
     if (opts.watermark && !opts.wmText.trim()) { log(box, "勾了水印但没填文字", "err"); return; }
+    if (opts.logo && !logoImg) { log(box, "勾了 Logo 水印但没选 Logo 文件", "err"); return; }
+    if (opts.cut && opts.fmt === "image/jpeg") {
+      log(box, "抠图需要透明背景，输出格式不能是 JPG（请改成 PNG 或 WebP）", "err");
+      return;
+    }
     this.disabled = true;
     prog($("img-prog"), 0);
     var outs = [], totalIn = 0, totalOut = 0;
@@ -259,7 +406,13 @@
         var r = await loadImage(f);
         var c = drawOnCanvas(r.img, opts);
         URL.revokeObjectURL(r.url);
+        // 专业版流程：去白边 → 抠图 → 边框 → logo 水印
+        if (opts.trim) c = trimEdges(c, 12);
+        if (opts.cut) c = removeBg(c, 30);
+        if (opts.border) c = addBorder(c, opts.borderW, opts.borderC);
+        if (opts.logo && logoImg) c = drawLogo(c, logoImg, opts.logoPos, 18, 60);
         var type = opts.fmt === "keep" ? (f.type === "image/png" ? "image/png" : "image/jpeg") : opts.fmt;
+        if (opts.cut && type === "image/jpeg") type = "image/png";
         var blob;
         if (opts.limit && type !== "image/png") blob = await compressToSize(c, type, opts.q / 100, opts.limit);
         else blob = await canvasToBlob(c, type, opts.q / 100);
