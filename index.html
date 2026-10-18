@@ -164,11 +164,34 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-con
       </div>
       <div class="opt">
         <label class="check"><input type="checkbox" id="img-sq">补白边成正方形</label>
+        <label class="check"><input type="checkbox" id="img-trim">智能去白边</label>
+        <label class="check"><input type="checkbox" id="img-cut">抠图变透明</label>
+      </div>
+      <div class="opt">
         <label class="check"><input type="checkbox" id="img-wm">文字水印</label>
         <input type="text" id="img-wmt" placeholder="水印文字" style="flex:1;min-width:120px">
         <select id="img-wmp">
           <option value="se">右下</option><option value="center">居中斜排</option><option value="sw">左下</option>
           <option value="ne">右上</option><option value="nw">左上</option>
+        </select>
+      </div>
+      <div class="opt">
+        <label class="check"><input type="checkbox" id="img-logo">Logo水印</label>
+        <input type="file" id="img-logofile" accept="image/*" hidden>
+        <button class="btn2" id="img-logobtn" style="padding:6px 12px;font-size:12.5px">选择 Logo</button>
+        <span id="img-logolabel" style="font-size:12px;color:var(--ink3)">未选择</span>
+        <select id="img-logopos">
+          <option value="se">右下</option><option value="center">居中</option><option value="sw">左下</option>
+          <option value="ne">右上</option><option value="nw">左上</option>
+        </select>
+      </div>
+      <div class="opt">
+        <label class="check"><input type="checkbox" id="img-bd">加边框</label>
+        <input type="number" id="img-bdw" value="4" style="width:64px" title="粗细（相对短边千分比）">
+        <select id="img-bdc">
+          <option value="#000000">黑色</option><option value="#ffffff">白色</option>
+          <option value="#444444">深灰</option><option value="#c8c8c8">浅灰</option>
+          <option value="#3884f5">品牌蓝</option>
         </select>
       </div>
       <div class="opt">
