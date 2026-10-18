@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>图片批处理助手 — 电商图片批量处理工具</title>
+<meta name="description" content="批量改尺寸、压缩、加水印、去白边、抠图。免安装，双击即用，本地运行不上传。">
+<style>
+  :root {
+    --blue: #3884f5;
+    --blue-dark: #2463c7;
+    --ink: #1a2233;
+    --ink-2: #55617a;
+    --ink-3: #8b95a8;
+    --line: #e5e9f0;
+    --bg: #f7f9fc;
+    --card: #ffffff;
+    --radius: 14px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei UI", "PingFang SC", sans-serif;
+    color: var(--ink);
+    background: var(--bg);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+  /* ---------- 顶栏 ---------- */
+  header {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(255,255,255,.88);
+    backdrop-filter: saturate(180%) blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav { display: flex; align-items: center; gap: 14px; height: 62px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 16px; }
+  .brand img { width: 30px; height: 30px; border-radius: 8px; }
+  .nav-links { margin-left: auto; display: flex; gap: 22px; font-size: 14px; }
+  .nav-links a { color: var(--ink-2); text-decoration: none; }
+  .nav-links a:hover { color: var(--blue); }
+  .nav .btn { margin-left: 8px; }
+  @media (max-width: 720px) { .nav-links { display: none; } }
+
+  /* ---------- 按钮 ---------- */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+    padding: 11px 22px; border-radius: 10px; font-size: 14.5px; font-weight: 600;
+    text-decoration: none; border: none; cursor: pointer; transition: .18s;
+    white-space: nowrap;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, #4a90ff, #2463c7);
+    color: #fff; box-shadow: 0 4px 14px rgba(56,132,245,.32);
+  }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 7px 20px rgba(56,132,245,.4); }
+  .btn-ghost {
+    background: #fff; color: var(--ink); border: 1px solid var(--line);
+  }
+  .btn-ghost:hover { border-color: var(--blue); color: var(--blue); }
+  .btn-sm { padding: 8px 16px; font-size: 13.5px; }
+
+  /* ---------- Hero ---------- */
+  .hero { padding: 76px 0 64px; text-align: center; }
+  .badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 5px 13px; border-radius: 999px; font-size: 12.5px; font-weight: 600;
+    background: #eaf2ff; color: var(--blue-dark); margin-bottom: 22px;
+  }
+  .hero h1 {
+    font-size: clamp(30px, 5vw, 46px); line-height: 1.22; letter-spacing: -.6px;
+    font-weight: 800; margin-bottom: 18px;
+  }
+  .hero h1 .grad {
+    background: linear-gradient(120deg, #4a90ff, #7c5ce0);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .hero p.lead {
+    font-size: clamp(15px, 2vw, 18px); color: var(--ink-2);
+    max-width: 640px; margin: 0 auto 34px;
+  }
+  .hero-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 14px; }
+  .hero-note { font-size: 12.5px; color: var(--ink-3); }
+
+  /* ---------- 主视觉 ---------- */
+  .shot-main {
+    margin: 44px auto 0; max-width: 900px;
+    border-radius: var(--radius); overflow: hidden;
+    box-shadow: 0 22px 60px rgba(26,34,51,.16), 0 2px 8px rgba(26,34,51,.06);
+    border: 1px solid rgba(255,255,255,.6);
+    background: #fff;
+  }
+  .shot-main img { width: 100%; display: block; }
+
+  /* ---------- 卖点条 ---------- */
+  .stats {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
+    background: var(--line); border-radius: var(--radius); overflow: hidden;
+    margin: 56px 0;
+  }
+  .stat { background: #fff; padding: 26px 18px; text-align: center; }
+  .stat .num { font-size: 26px; font-weight: 800; color: var(--blue); letter-spacing: -.5px; }
+  .stat .lbl { font-size: 13px; color: var(--ink-3); margin-top: 4px; }
+  @media (max-width: 720px) { .stats { grid-template-columns: repeat(2, 1fr); } }
+
+  /* ---------- 章节 ---------- */
+  section { padding: 56px 0; }
+  .sec-head { text-align: center; margin-bottom: 44px; }
+  .sec-head h2 {
+    font-size: clamp(23px, 3.4vw, 32px); font-weight: 800; letter-spacing: -.4px;
+    margin-bottom: 12px;
+  }
+  .sec-head p { color: var(--ink-2); font-size: 15px; max-width: 560px; margin: 0 auto; }
+
+  /* ---------- 功能网格 ---------- */
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  @media (max-width: 860px) { .grid { grid-template-columns: 1fr; } }
+  .card {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 24px;
+    transition: .2s;
+  }
+  .card:hover { border-color: #c9dbff; box-shadow: 0 8px 26px rgba(56,132,245,.1); transform: translateY(-2px); }
+  .card .ico {
+    width: 40px; height: 40px; border-radius: 10px;
+    background: #eaf2ff; display: flex; align-items: center; justify-content: center;
+    font-size: 19px; margin-bottom: 14px;
+  }
+  .card h3 { font-size: 15.5px; font-weight: 700; margin-bottom: 7px; }
+  .card p { font-size: 13.5px; color: var(--ink-2); line-height: 1.6; }
+  .card .new {
+    display: inline-block; margin-left: 7px; padding: 1px 7px; border-radius: 5px;
+    font-size: 10.5px; font-weight: 700; background: #fff2e0; color: #c07000;
+    vertical-align: middle;
+  }
+
+  /* ---------- 截图区 ---------- */
+  .shots { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; }
+  @media (max-width: 780px) { .shots { grid-template-columns: 1fr; } }
+  .shot {
+    background: #fff; border: 1px solid var(--line); border-radius: var(--radius);
+    overflow: hidden; transition: .2s;
+  }
+  .shot:hover { box-shadow: 0 12px 34px rgba(26,34,51,.12); transform: translateY(-2px); }
+  .shot img { width: 100%; display: block; border-bottom: 1px solid var(--line); }
+  .shot .cap { padding: 14px 18px; }
+  .shot .cap b { font-size: 14px; display: block; margin-bottom: 3px; }
+  .shot .cap span { font-size: 12.5px; color: var(--ink-3); }
+
+  /* ---------- 对比 ---------- */
+  .compare {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 18px;
+    max-width: 780px; margin: 0 auto;
+  }
+  @media (max-width: 720px) { .compare { grid-template-columns: 1fr; } }
+  .cmp { border-radius: var(--radius); padding: 24px; }
+  .cmp.bad { background: #fff5f5; border: 1px solid #ffd9d9; }
+  .cmp.good { background: #f2fbf5; border: 1px solid #c8ecd3; }
+  .cmp h4 { font-size: 14.5px; margin-bottom: 14px; display: flex; align-items: center; gap: 7px; }
+  .cmp ul { list-style: none; }
+  .cmp li { font-size: 13.5px; padding: 5px 0; color: var(--ink-2); }
+  .cmp.bad li::before { content: "✕"; color: #e05a5a; margin-right: 9px; font-weight: 700; }
+  .cmp.good li::before { content: "✓"; color: #2fa360; margin-right: 9px; font-weight: 700; }
+
+  /* ---------- 价格 ---------- */
+  .price-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 720px; margin: 0 auto; }
+  @media (max-width: 720px) { .price-wrap { grid-template-columns: 1fr; } }
+  .plan {
+    background: #fff; border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 28px; position: relative; transition: .2s;
+  }
+  .plan.featured { border-color: var(--blue); box-shadow: 0 10px 34px rgba(56,132,245,.14); }
+  .plan .tag {
+    position: absolute; top: -11px; left: 50%; transform: translateX(-50%);
+    background: var(--blue); color: #fff; font-size: 11px; font-weight: 700;
+    padding: 3px 12px; border-radius: 999px; white-space: nowrap;
+  }
+  .plan h3 { font-size: 16px; margin-bottom: 6px; }
+  .plan .desc { font-size: 12.5px; color: var(--ink-3); margin-bottom: 18px; }
+  .plan .amt { font-size: 34px; font-weight: 800; letter-spacing: -1px; }
+  .plan .amt small { font-size: 14px; font-weight: 600; color: var(--ink-3); margin-left: 3px; }
+  .plan ul { list-style: none; margin: 18px 0 22px; }
+  .plan li { font-size: 13.5px; padding: 4px 0; color: var(--ink-2); }
+  .plan li::before { content: "✓"; color: #2fa360; margin-right: 8px; font-weight: 700; }
+  .plan li.no { color: var(--ink-3); }
+  .plan li.no::before { content: "—"; color: var(--ink-3); }
+
+  /* ---------- FAQ ---------- */
+  .faq { max-width: 760px; margin: 0 auto; }
+  details {
+    background: #fff; border: 1px solid var(--line); border-radius: 11px;
+    padding: 16px 20px; margin-bottom: 10px;
+  }
+  details[open] { border-color: #c9dbff; }
+  summary {
+    font-size: 14.5px; font-weight: 600; cursor: pointer; list-style: none;
+    display: flex; justify-content: space-between; align-items: center; gap: 12px;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: "+"; color: var(--ink-3); font-size: 19px; font-weight: 400; flex: none; }
+  details[open] summary::after { content: "−"; }
+  details p { font-size: 13.5px; color: var(--ink-2); margin-top: 11px; line-height: 1.7; }
+
+  /* ---------- CTA ---------- */
+  .cta {
+    background: linear-gradient(135deg, #2463c7, #4a90ff 55%, #7c5ce0);
+    border-radius: 20px; padding: 52px 32px; text-align: center; color: #fff;
+    margin: 30px 0 10px;
+  }
+  .cta h2 { font-size: clamp(22px, 3.4vw, 30px); font-weight: 800; margin-bottom: 12px; }
+  .cta p { opacity: .92; font-size: 15px; margin-bottom: 26px; }
+  .cta .btn { background: #fff; color: var(--blue-dark); }
+  .cta .btn:hover { transform: translateY(-1px); }
+
+  /* ---------- 页脚 ---------- */
+  footer {
+    border-top: 1px solid var(--line); padding: 30px 0 40px;
+    text-align: center; font-size: 12.5px; color: var(--ink-3);
+  }
+  footer a { color: var(--ink-2); text-decoration: none; }
+  footer a:hover { color: var(--blue); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <div class="brand">
+      <img src="img/icon.png" alt="">
+      <span>图片批处理助手</span>
+    </div>
+    <nav class="nav-links">
+      <a href="#features">功能</a>
+      <a href="#shots">界面</a>
+      <a href="#compare">对比</a>
+      <a href="#price">价格</a>
+      <a href="#faq">常见问题</a>
+    </nav>
+    <a class="btn btn-primary btn-sm" href="#price">立即获取</a>
+  </div>
+</header>
+
+<!-- ============ Hero ============ -->
+<div class="hero wrap">
+  <div class="badge">⚡ 免安装 · 双击即用 · 不上传</div>
+  <h1>几百张商品图，<br><span class="grad">一次全部处理好</span></h1>
+  <p class="lead">
+    改尺寸、压体积、加边框、加水印、去白边、抠背景——
+    把原来要熬一下午的活，压缩到几分钟。
+  </p>
+  <div class="hero-actions">
+    <a class="btn btn-primary" href="#price">看看多少钱</a>
+    <a class="btn btn-ghost" href="#features">先看功能</a>
+  </div>
+  <div class="hero-note">Windows 10 / 11 · 无需安装 Python · 纯本地运行</div>
+
+  <div class="shot-main">
+    <img src="img/03_专业功能.png" alt="软件界面截图">
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="stats">
+    <div class="stat"><div class="num">7</div><div class="lbl">批量处理功能</div></div>
+    <div class="stat"><div class="num">0</div><div class="lbl">需要安装的东西</div></div>
+    <div class="stat"><div class="num">100%</div><div class="lbl">本地处理不外传</div></div>
+    <div class="stat"><div class="num">3 步</div><div class="lbl">上手所需操作</div></div>
+  </div>
+</div>
+
+<!-- ============ 功能 ============ -->
+<section id="features">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>能做什么</h2>
+      <p>所有功能都能批量处理，几百张图一次搞定</p>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <div class="ico">📐</div>
+        <h3>批量改尺寸</h3>
+        <p>按长边、固定尺寸、百分比缩放。等比缩放+补白边，<b>不变形不拉伸</b>。内置淘宝 800×800、京东、小红书等常用规格。</p>
+      </div>
+
+      <div class="card">
+        <div class="ico">🗜️</div>
+        <h3>批量压缩</h3>
+        <p>可指定「压到 200KB 以下」，程序自动调质量逼近目标。<b>不会瞎压</b>——优先保证画质够用的前提下最小。</p>
+      </div>
+
+      <div class="card">
+        <div class="ico">🔲</div>
+        <h3>补白边成正方形</h3>
+        <p>做电商主图刚需。非正方形的图自动补白边成正方形，<b>完整保留内容</b>，不裁掉任何部分。</p>
+      </div>
+
+      <div class="card">
+        <div class="ico">✂️</div>
+        <h3>智能去白边 <span class="new">专业版</span></h3>
+        <p>自动识别并裁掉四周的纯色边。白边、黑边、任意纯色边都行。强度可调，<b>不会误伤内容</b>。</p>
+      </div>
+
+      <div class="card">
+        <div class="ico">🪄</div>
+        <h3>批量抠图 <span class="new">专业版</span></h3>
+        <p>纯色背景（白底/蓝布/绿幕）一键变透明，输出 PNG。<b>边缘自动柔化</b>，比硬边自然。</p>
+      </div>
+
+      <div class="card">
+        <div class="ico">🖼️</div>
+        <h3>加边框 <span class="new">专业版</span></h3>
+        <p>纯色描边，5 种预设色。商品图加一圈细边框，在列表里更精神、更整齐。</p>
+      </div>
+
+      <div class="card">
+        <div class="ico">💧</div>
+        <h3>文字水印</h3>
+        <p>9 个位置，透明度和字号可调。带半透明描边，<b>浅色图上也能看清</b>。支持中文。</p>
+      </div>
+
+      <div class="card">
+        <div class="ico">🏷️</div>
+        <h3>图片水印 <span class="new">专业版</span></h3>
+        <p>用你的 logo 图片做水印，大小按比例自动适配。透明 PNG 效果最好。</p>
+      </div>
+
+      <div class="card">
+        <div class="ico">🔢</div>
+        <h3>批量重命名</h3>
+        <p>按「前缀 + 序号」统一命名：img_001、img_002… 整理素材库时特别好用。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 截图 ============ -->
+<section id="shots" style="background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line);">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>界面长这样</h2>
+      <p>不花哨，但每一处都为「少点几下」设计</p>
+    </div>
+
+    <div class="shots">
+      <div class="shot">
+        <img src="img/01_尺寸.png" alt="尺寸设置">
+        <div class="cap"><b>尺寸</b><span>四种缩放方式 + 电商常用规格快捷选择</span></div>
+      </div>
+      <div class="shot">
+        <img src="img/02_压缩_格式.png" alt="压缩设置">
+        <div class="cap"><b>压缩 / 格式</b><span>画质滑杆 + 指定目标大小，自动逼近</span></div>
+      </div>
+      <div class="shot">
+        <img src="img/03_专业功能.png" alt="专业功能">
+        <div class="cap"><b>专业功能</b><span>去白边、抠图、加边框、logo 水印</span></div>
+      </div>
+      <div class="shot">
+        <img src="img/04_水印.png" alt="水印设置">
+        <div class="cap"><b>水印</b><span>9 个位置，透明度与字号独立可调</span></div>
+      </div>
+      <div class="shot">
+        <img src="img/06_专业功能_已勾选.png" alt="专业功能已启用">
+        <div class="cap"><b>专业功能（已启用）</b><span>勾选后控件自动解锁，参数即时可调</span></div>
+      </div>
+      <div class="shot">
+        <img src="img/05_重命名.png" alt="重命名设置">
+        <div class="cap"><b>重命名</b><span>前缀 + 序号，素材库整理利器</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 对比 ============ -->
+<section id="compare">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>为什么要用它</h2>
+      <p>不是功能有多强，是把麻烦的部分替你做好了</p>
+    </div>
+
+    <div class="compare">
+      <div class="cmp bad">
+        <h4>😩 手动一张张处理</h4>
+        <ul>
+          <li>PS 开一张改一张，几百张搞一下午</li>
+          <li>改完发现尺寸不统一，重来</li>
+          <li>压太小糊了，压太大传不上去</li>
+          <li>加完水印才发现位置挡住了产品</li>
+          <li>文件名叫得乱七八糟，找不回来</li>
+        </ul>
+      </div>
+      <div class="cmp good">
+        <h4>😌 用这个工具</h4>
+        <ul>
+          <li>几百张拖进来，几分钟全部处理完</li>
+          <li>预设规格，一次设对所有图</li>
+          <li>填「200KB」，程序自己算质量</li>
+          <li>9 个位置可选，先预览再批量</li>
+          <li>统一命名 img_001、img_002…</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 价格 ============ -->
+<section id="price" style="background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line);">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>两个版本，按需选</h2>
+      <p>一次买断，永久使用，无订阅、无内购</p>
+    </div>
+
+    <div class="price-wrap">
+      <div class="plan">
+        <h3>基础版</h3>
+        <div class="desc">够用就好</div>
+        <div class="amt">¥9.9<small> / 一次买断</small></div>
+        <ul>
+          <li>批量改尺寸</li>
+          <li>批量压缩</li>
+          <li>补白边成正方形</li>
+          <li>文字水印</li>
+          <li>批量重命名</li>
+          <li>转 JPG / PNG / WEBP</li>
+          <li class="no">智能去白边</li>
+          <li class="no">批量抠图</li>
+          <li class="no">加边框</li>
+          <li class="no">logo 图片水印</li>
+        </ul>
+        <a class="btn btn-ghost" style="width:100%" href="#faq">了解详情</a>
+      </div>
+
+      <div class="plan featured">
+        <div class="tag">推荐 · 卖得最多</div>
+        <h3>专业版</h3>
+        <div class="desc">电商卖家首选</div>
+        <div class="amt">¥39<small> / 一次买断</small></div>
+        <ul>
+          <li><b>基础版全部功能</b></li>
+          <li>智能去白边（自动裁边）</li>
+          <li>批量抠图（纯色背景变透明）</li>
+          <li>加纯色边框（5 种颜色）</li>
+          <li>logo 图片水印</li>
+          <li>处理速度优化</li>
+          <li>优先答疑</li>
+        </ul>
+        <a class="btn btn-primary" style="width:100%" href="#faq">获取专业版</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section id="faq">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>常见问题</h2>
+    </div>
+
+    <div class="faq">
+      <details>
+        <summary>会覆盖我原来的图片吗？</summary>
+        <p>不会。原图完全不动，处理结果输出到你指定的文件夹。如果输出文件夹里有同名文件，会自动加 <code>_1</code>、<code>_2</code> 后缀，绝不覆盖。</p>
+      </details>
+
+      <details>
+        <summary>图片会被传到网上吗？</summary>
+        <p>不会。这是纯本地程序，<b>不联网、不上传任何东西</b>。断网也能正常用。</p>
+      </details>
+
+      <details>
+        <summary>需要装 Python 或者其他软件吗？</summary>
+        <p>不需要。下载的是一个 exe 文件，双击就能运行。Python 运行时已经打包在里面了（所以文件有 30MB）。</p>
+      </details>
+
+      <details>
+        <summary>Windows 提示"未知发布者"怎么办？</summary>
+        <p>点「更多信息」→「仍要运行」即可。这是因为没有购买代码签名证书（一年要几千块），不影响使用。</p>
+      </details>
+
+      <details>
+        <summary>抠图能抠复杂背景吗？</summary>
+        <p>不能。这个工具只适合<b>纯色背景</b>（白底、蓝布、绿幕）。复杂背景请用专业抠图软件或在线 AI 抠图服务。</p>
+      </details>
+
+      <details>
+        <summary>支持哪些图片格式？</summary>
+        <p>输入支持 jpg / jpeg / png / webp / bmp / tif / tiff / gif。输出支持 jpg / png / webp。</p>
+      </details>
+
+      <details>
+        <summary>能处理 RAW 格式（CR2 / NEF）吗？</summary>
+        <p>不能。只支持常见的网络格式。</p>
+      </details>
+
+      <details>
+        <summary>买了以后能换电脑用吗？</summary>
+        <p>能。不限设备，拷过去就能用。</p>
+      </details>
+
+      <details>
+        <summary>用不了能退吗？</summary>
+        <p>能。如果在你机器上跑不起来、或者功能达不到你的需求，说明情况全额退。</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA ============ -->
+<div class="wrap">
+  <div class="cta">
+    <h2>把时间花在选品上，别花在改图上</h2>
+    <p>几百张商品图，几分钟处理完</p>
+    <a class="btn" href="#price">选个版本</a>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <p>图片批处理助手 · 本地运行 · 不上传 · 不订阅</p>
+    <p style="margin-top:8px">
+      <a href="#features">功能</a> ·
+      <a href="#shots">界面</a> ·
+      <a href="#price">价格</a> ·
+      <a href="#faq">常见问题</a>
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>
