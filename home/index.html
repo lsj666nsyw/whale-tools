@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>鲸鱼工具箱 — 免费在线工具集｜图片·PDF·表格·24 个小工具</title>
+<meta name="description" content="全部在浏览器本地运行的免费工具集：图片压缩改尺寸、PDF 合并拆分、Excel 合并比对，外加 24 个常用小工具。文件不上传，不用注册，手机电脑都能用。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%233884f5'/%3E%3Ctext x='32' y='44' font-size='32' text-anchor='middle' fill='white'%3E%F0%9F%90%8B%3C/text%3E%3C/svg%3E">
+<style>
+:root{
+  --blue:#3884f5; --blue2:#2463c7; --purple:#7c5ce0; --purple2:#5b3fc4;
+  --green:#2fa360; --ink:#1a2233; --ink2:#55617a; --ink3:#8b95a8;
+  --line:#e3e8f0; --bg:#f5f7fb; --card:#fff; --r:16px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei UI",sans-serif;
+  background:var(--bg);color:var(--ink);line-height:1.65;
+  padding-bottom:env(safe-area-inset-bottom);
+}
+.wrap{max-width:920px;margin:0 auto;padding:0 16px}
+
+/* ---------- 头部 ---------- */
+.hero{
+  background:linear-gradient(140deg,#4a90ff 0%,#3884f5 42%,#7c5ce0 100%);
+  color:#fff;padding:44px 0 52px;position:relative;overflow:hidden;
+}
+.hero::after{
+  content:"";position:absolute;right:-60px;top:-40px;width:280px;height:280px;
+  border-radius:50%;background:rgba(255,255,255,.09);
+}
+.hero::before{
+  content:"";position:absolute;right:80px;bottom:-90px;width:200px;height:200px;
+  border-radius:50%;background:rgba(255,255,255,.07);
+}
+.hero .wrap{position:relative;z-index:1}
+.logo{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.logo .mark{
+  width:52px;height:52px;border-radius:15px;background:rgba(255,255,255,.2);
+  display:flex;align-items:center;justify-content:center;font-size:28px;flex:none;
+  backdrop-filter:blur(6px);
+}
+.logo h1{font-size:23px;font-weight:800;letter-spacing:.5px}
+.logo .sub{font-size:12.5px;opacity:.85;font-weight:500;margin-top:2px}
+.hero p.lead{font-size:15px;opacity:.95;max-width:620px;margin-bottom:22px}
+.badges{display:flex;gap:8px;flex-wrap:wrap}
+.badge{
+  background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.28);
+  border-radius:999px;padding:5px 13px;font-size:12.5px;font-weight:600;backdrop-filter:blur(6px);
+}
+
+/* ---------- 分区标题 ---------- */
+.sec-title{
+  display:flex;align-items:center;gap:9px;margin:34px 0 14px;
+  font-size:16.5px;font-weight:800;
+}
+.sec-title .bar{width:4px;height:19px;border-radius:3px;background:linear-gradient(180deg,var(--blue),var(--purple))}
+.sec-title small{font-size:12.5px;color:var(--ink3);font-weight:500;margin-left:auto}
+
+/* ---------- 产品卡片 ---------- */
+.products{display:grid;grid-template-columns:repeat(auto-fit,minmax(272px,1fr));gap:14px}
+.prod{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  padding:20px;text-decoration:none;color:inherit;display:flex;flex-direction:column;
+  transition:.18s;position:relative;overflow:hidden;
+}
+.prod:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(36,99,199,.13);border-color:#c9d9f0}
+.prod:active{transform:translateY(-1px)}
+.prod .top{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.prod .ico{
+  width:46px;height:46px;border-radius:13px;display:flex;align-items:center;justify-content:center;
+  font-size:23px;flex:none;
+}
+.prod.b-blue .ico{background:linear-gradient(135deg,#e8f1ff,#d5e5fd)}
+.prod.b-purple .ico{background:linear-gradient(135deg,#f0ecff,#e2d9fd)}
+.prod.b-green .ico{background:linear-gradient(135deg,#e8f8ef,#d3f0e0)}
+.prod h2{font-size:16.5px;font-weight:800}
+.prod .tagline{font-size:12.5px;color:var(--ink3);margin-top:1px}
+.prod .desc{font-size:13.5px;color:var(--ink2);margin-bottom:14px}
+.prod ul{list-style:none;margin-bottom:16px;flex:1}
+.prod ul li{
+  font-size:13px;color:var(--ink2);padding:4px 0 4px 20px;position:relative;
+}
+.prod ul li::before{
+  content:"✓";position:absolute;left:0;top:4px;color:var(--green);font-weight:700;font-size:12px;
+}
+.prod .cta{
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  padding:11px;border-radius:11px;font-size:14.5px;font-weight:700;color:#fff;
+}
+.prod.b-blue .cta{background:linear-gradient(135deg,#4a90ff,#2463c7);box-shadow:0 5px 14px rgba(36,99,199,.28)}
+.prod.b-purple .cta{background:linear-gradient(135deg,#9b7cf0,#5b3fc4);box-shadow:0 5px 14px rgba(124,92,224,.28)}
+.prod.b-green .cta{background:linear-gradient(135deg,#3fbb73,#248a4c);box-shadow:0 5px 14px rgba(47,163,96,.28)}
+.prod .pill{
+  position:absolute;top:14px;right:14px;font-size:10.5px;font-weight:700;
+  padding:3px 9px;border-radius:999px;background:#eef5ff;color:var(--blue2);
+}
+.prod .pill.hot{background:#fff2e8;color:#d46b08}
+
+/* ---------- 原则说明 ---------- */
+.principles{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:8px}
+.prin{
+  background:var(--card);border:1px solid var(--line);border-radius:13px;padding:16px;
+}
+.prin .ic{font-size:22px;margin-bottom:8px}
+.prin h3{font-size:14px;font-weight:700;margin-bottom:4px}
+.prin p{font-size:12.5px;color:var(--ink2);line-height:1.6}
+
+/* ---------- FAQ ---------- */
+.faq{margin-top:8px}
+.faq details{
+  background:var(--card);border:1px solid var(--line);border-radius:12px;
+  padding:14px 16px;margin-bottom:9px;
+}
+.faq summary{
+  font-size:14px;font-weight:700;cursor:pointer;list-style:none;
+  display:flex;align-items:center;gap:8px;
+}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::before{content:"▸";color:var(--blue);font-size:12px;transition:.15s}
+.faq details[open] summary::before{transform:rotate(90deg)}
+.faq p{font-size:13px;color:var(--ink2);margin-top:9px;padding-left:16px}
+
+/* ---------- 页脚 ---------- */
+footer{border-top:1px solid var(--line);background:#fff;padding:26px 0 34px;margin-top:34px}
+footer .wrap{display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between}
+footer .fnav{display:flex;gap:16px;flex-wrap:wrap;font-size:13px}
+footer .fnav a{color:var(--ink2);text-decoration:none;font-weight:600}
+footer .fnav a:hover{color:var(--blue)}
+footer .copy{font-size:12px;color:var(--ink3)}
+
+@media(max-width:560px){
+  .hero{padding:34px 0 42px}
+  .logo h1{font-size:20px}
+  .hero p.lead{font-size:14px}
+  .sec-title{font-size:15.5px}
+}
+</style>
+</head>
+<body>
+
+<!-- ==================== 头部 ==================== -->
+<div class="hero">
+  <div class="wrap">
+    <div class="logo">
+      <div class="mark">🐋</div>
+      <div>
+        <h1>鲸鱼工具箱</h1>
+        <div class="sub">免费 · 本地运行 · 无需注册</div>
+      </div>
+    </div>
+    <p class="lead">
+      把图片、PDF、表格的日常处理和 24 个常用小工具放在一起。
+      所有计算都在这台设备的浏览器里完成，<b>文件不会上传到任何服务器</b>，
+      断网也能用，不限次数。
+    </p>
+    <div class="badges">
+      <span class="badge">✓ 完全免费</span>
+      <span class="badge">✓ 文件不上传</span>
+      <span class="badge">✓ 不用注册</span>
+      <span class="badge">✓ 手机电脑通用</span>
+      <span class="badge">✓ 断网可用</span>
+    </div>
+  </div>
+</div>
+
+<main class="wrap">
+
+  <!-- ==================== 产品 ==================== -->
+  <div class="sec-title"><span class="bar"></span>选一个开始<small>点卡片直接打开</small></div>
+
+  <div class="products">
+
+    <a class="prod b-purple" href="https://lsj666nsyw.github.io/whale-tools/">
+      <span class="pill hot">24 合 1</span>
+      <div class="top">
+        <div class="ico">🧰</div>
+        <div>
+          <h2>小工具集</h2>
+          <div class="tagline">24 个常用工具 · 随开随用</div>
+        </div>
+      </div>
+      <p class="desc">日常高频小需求一网打尽，顶部有搜索框，输入关键词秒定位。</p>
+      <ul>
+        <li>二维码 / Base64 / URL / 哈希编解码</li>
+        <li>文本处理 / 字数统计 / 简繁转换</li>
+        <li>单位换算 / 百分比 / 随机数 / 比例</li>
+        <li>时间戳 / 日期计算 / 生肖</li>
+        <li>密码生成 / 抽签 / 命名风格 / JSON</li>
+        <li>身份证校验 / 单张图片压缩</li>
+      </ul>
+      <div class="cta">打开小工具 →</div>
+    </a>
+
+    <a class="prod b-blue" href="https://lsj666nsyw.github.io/whale-batch/">
+      <span class="pill">批量处理</span>
+      <div class="top">
+        <div class="ico">📦</div>
+        <div>
+          <h2>批量处理三件套</h2>
+          <div class="tagline">图片 · PDF · 表格 一次多份</div>
+        </div>
+      </div>
+      <p class="desc">一次选几十个文件，批量改尺寸、压缩、加水印、合并、拆分、对账。</p>
+      <ul>
+        <li>图片：批量压缩 / 改尺寸 / 水印 / 改格式</li>
+        <li>PDF：合并 / 每页拆 / 提取页码</li>
+        <li>表格：多表合并 / 按列拆分 / 两表比对</li>
+        <li>支持 .xlsx / .xls / .csv</li>
+        <li>结果可打包成 ZIP 一次下载</li>
+      </ul>
+      <div class="cta">打开批量处理 →</div>
+    </a>
+
+    <a class="prod b-green" href="https://lsj666nsyw.github.io/office-tools/">
+      <span class="pill">最全</span>
+      <div class="top">
+        <div class="ico">🏢</div>
+        <div>
+          <h2>全能办公工具箱</h2>
+          <div class="tagline">8 大模块 · 文档处理全覆盖</div>
+        </div>
+      </div>
+      <p class="desc">办公文档的进阶处理：水印、页面操作、转长图、数据清洗分析。</p>
+      <ul>
+        <li>图片：压缩 / 白边 / 去边 / 抠图 / 水印</li>
+        <li>PDF：合并 / 拆分 / 水印 / 统一尺寸 / 转图</li>
+        <li>Word：转 HTML / 纯文本 / 在线预览</li>
+        <li>Excel：合并 / 拆分 / 比对 / 转 CSV</li>
+        <li>数据处理：清理 / 排序 / 筛选 / 统计 / 拆列</li>
+        <li>图片批处理+：二维码 / 拼接 / GIF 拆帧</li>
+      </ul>
+      <div class="cta">打开办公工具箱 →</div>
+    </a>
+
+  </div>
+
+  <!-- ==================== 为什么可信 ==================== -->
+  <div class="sec-title"><span class="bar"></span>为什么可以放心用</div>
+  <div class="principles">
+    <div class="prin">
+      <div class="ic">🔒</div>
+      <h3>文件真的不上传</h3>
+      <p>没有后端服务器，所有处理都由你的浏览器执行。合同、身份证、报表这类敏感文件也能放心用。</p>
+    </div>
+    <div class="prin">
+      <div class="ic">📴</div>
+      <h3>断网照样能用</h3>
+      <p>页面加载完后，处理逻辑全在本地。飞机上、内网里、信号差的地方都不影响。</p>
+    </div>
+    <div class="prin">
+      <div class="ic">♾️</div>
+      <h3>不限次数</h3>
+      <p>不用注册、不用登录、没有每日额度。愿意处理多少文件就处理多少。</p>
+    </div>
+    <div class="prin">
+      <div class="ic">📱</div>
+      <h3>手机也好用</h3>
+      <p>界面按触屏设计，按钮和输入框都够大。手机拍的文件可以直接处理。</p>
+    </div>
+  </div>
+
+  <!-- ==================== FAQ ==================== -->
+  <div class="sec-title"><span class="bar"></span>常见问题</div>
+  <div class="faq">
+    <details>
+      <summary>三个站有什么区别？该用哪个？</summary>
+      <p>「批量处理三件套」最轻，只做图片/PDF/表格的批量操作，打开最快；「小工具集」是 24 个日常小工具；「全能办公工具箱」功能最全，覆盖 Word 转档、PDF 水印、数据清洗这些进阶需求。日常随手用选前两个，办公深度处理选第三个。</p>
+    </details>
+    <details>
+      <summary>文件会不会被保存在服务器上？</summary>
+      <p>不会。这些站点是纯静态网页，没有任何后端。你的文件从选择到出结果全程在浏览器内存里，关掉页面就消失，我们既看不到也拿不到。</p>
+    </details>
+    <details>
+      <summary>为什么第一次打开有点慢？</summary>
+      <p>首次要下载几个处理库（PDF、表格相关，共约 2～4 MB）。加载完就缓存住了，之后再打开很快，而且之后断网也能继续用。</p>
+    </details>
+    <details>
+      <summary>支持哪些文件格式？</summary>
+      <p>图片支持 JPG / PNG / WebP / BMP / GIF；PDF 支持标准 .pdf；表格支持 .xlsx / .xls / .csv；文档支持 .docx（Word 2007 及以上）。老格式 .doc 需要先用 Word 另存为 .docx。</p>
+    </details>
+    <details>
+      <summary>手机上怎么用？</summary>
+      <p>直接用手机浏览器打开上面的任意一个地址即可，界面自动适配小屏。如果想处理相册里的照片，点「选择图片」时允许访问相册就行。</p>
+    </details>
+  </div>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="fnav">
+      <a href="https://lsj666nsyw.github.io/whale-tools/">小工具集</a>
+      <a href="https://lsj666nsyw.github.io/whale-batch/">批量处理</a>
+      <a href="https://lsj666nsyw.github.io/office-tools/">办公工具箱</a>
+    </div>
+    <div class="copy">鲸鱼工具箱 · 全部工具浏览器本地运行 · 免费无广告</div>
+  </div>
+</footer>
+
+</body>
+</html>
