@@ -79,6 +79,16 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-con
 .promo{background:linear-gradient(135deg,#f0ecff,#f6f5fb);border:1px solid #ddd5f8;border-radius:var(--r);
   padding:13px 16px;margin-bottom:14px;font-size:13px;color:var(--ink2)}
 .promo b{color:var(--ink)}
+/* 工具搜索 */
+.toolsearch{display:flex;align-items:center;gap:8px;margin:12px 0 2px}
+.toolsearch input{
+  flex:1;min-width:0;border:1px solid var(--line);border-radius:999px;padding:9px 16px;font-size:14px;
+  background:#fff;color:var(--ink);font-family:inherit}
+.toolsearch input:focus{outline:none;border-color:var(--p);box-shadow:0 0 0 3px rgba(124,92,224,.12)}
+.toolcount{font-size:12px;color:var(--ink3);flex:none;min-width:56px;text-align:right}
+nav button.hide{display:none}
+nav .nomatch{display:none;font-size:13px;color:var(--ink3);padding:12px 4px}
+nav.filtering .nomatch{display:block}
 @media(max-width:560px){.hd .pc{display:none}nav button{padding:7px 12px;font-size:13px}}
 </style>
 </head>
@@ -94,31 +104,35 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-con
 </header>
 
 <main class="wrap">
-  <nav>
-    <button class="on" data-t="qr">📱 二维码</button>
-    <button data-t="color">🎨 颜色</button>
-    <button data-t="text">📝 文本</button>
-    <button data-t="unit">📏 单位</button>
-    <button data-t="pwd">🔐 密码</button>
-    <button data-t="ts">⏰ 时间戳</button>
-    <button data-t="json">{} JSON</button>
-    <button data-t="img">🖼 图片压缩</button>
-    <button data-t="date">📅 日期</button>
-    <button data-t="rand">🎲 抽签</button>
-    <button data-t="name">🔤 命名</button>
-    <button data-t="b64">🔡 Base64</button>
-    <button data-t="url">🔗 URL</button>
-    <button data-t="hash">#️⃣ 哈希</button>
-    <button data-t="morse">📡 摩斯</button>
-    <button data-t="cnt">🔢 字数</button>
-    <button data-t="sc">🈶 简繁</button>
-    <button data-t="pct">％ 百分比</button>
-    <button data-t="rn">🎯 随机数</button>
-    <button data-t="idcard">🆔 身份证</button>
-    <button data-t="cv">✅ 校验</button>
-    <button data-t="fmt">🧹 代码格式</button>
-    <button data-t="zs">🐲 生肖</button>
-    <button data-t="rt">⚖️ 比例</button>
+  <div class="toolsearch">
+    <input type="search" id="tool-q" placeholder="🔍 搜工具：压缩 / 二维码 / base64 / 单位换算…" autocomplete="off">
+    <span id="tool-count" class="toolcount"></span>
+  </div>
+  <nav id="tool-nav">
+    <button class="on" data-t="qr" data-k="二维码 qr code 生成 名片">📱 二维码</button>
+    <button data-t="color" data-k="颜色 color 取色 调色 hex rgb">🎨 颜色</button>
+    <button data-t="text" data-k="文本 text 去重 排序 大小写">📝 文本</button>
+    <button data-t="unit" data-k="单位 换算 长度 重量 温度">📏 单位</button>
+    <button data-t="pwd" data-k="密码 生成 随机 安全 强度">🔐 密码</button>
+    <button data-t="ts" data-k="时间戳 timestamp 时间 转换">⏰ 时间戳</button>
+    <button data-t="json" data-k="json 格式化 压缩 校验">{} JSON</button>
+    <button data-t="img" data-k="图片 压缩 尺寸 体积 改大小">🖼 图片压缩</button>
+    <button data-t="date" data-k="日期 计算 相差 天数 工作日">📅 日期</button>
+    <button data-t="rand" data-k="抽签 随机 抽取 名单">🎲 抽签</button>
+    <button data-t="name" data-k="命名 风格 驼峰 下划线 常量">🔤 命名</button>
+    <button data-t="b64" data-k="base64 编码 解码 加密">🔡 Base64</button>
+    <button data-t="url" data-k="url encode decode 转义 链接">🔗 URL</button>
+    <button data-t="hash" data-k="哈希 hash md5 sha 摘要">#️⃣ 哈希</button>
+    <button data-t="morse" data-k="摩斯 morse 电码">📡 摩斯</button>
+    <button data-t="cnt" data-k="字数 统计 字符 中文 单词">🔢 字数</button>
+    <button data-t="sc" data-k="简繁 简体 繁体 转换 中文">🈶 简繁</button>
+    <button data-t="pct" data-k="百分比 占比 增长率 计算">％ 百分比</button>
+    <button data-t="rn" data-k="随机数 范围 生成">🎯 随机数</button>
+    <button data-t="idcard" data-k="身份证 校验 归属地 性别 生日">🆔 身份证</button>
+    <button data-t="cv" data-k="校验 验证 校验位 内容 类型">✅ 校验</button>
+    <button data-t="fmt" data-k="代码 格式 美化 json js css">🧹 代码格式</button>
+    <button data-t="zs" data-k="生肖 属相 年份 农历">🐲 生肖</button>
+    <button data-t="rt" data-k="比例 换算 缩放 尺寸 分辨率">⚖️ 比例</button>
   </nav>
 
   <div class="promo">🔒 所有工具都在<b>你的浏览器里</b>运行，输入的内容不会发送到任何服务器。不用注册、不限次数、完全免费。</div>

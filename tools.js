@@ -40,14 +40,58 @@
   }
 
   // ===================== 选项卡 =====================
-  document.querySelector("nav").addEventListener("click", function (e) {
-    var b = e.target.closest("button");
-    if (!b) return;
-    document.querySelectorAll("nav button").forEach(function (x) { x.classList.remove("on"); });
-    document.querySelectorAll("section").forEach(function (x) { x.classList.remove("on"); });
-    b.classList.add("on");
-    $("t-" + b.dataset.t).classList.add("on");
-  });
+  var navBox = document.querySelector("nav");
+  if (navBox) {
+    navBox.addEventListener("click", function (e) {
+      var b = e.target.closest("button");
+      if (!b || !b.dataset.t) return;
+      navBox.querySelectorAll("button").forEach(function (x) { x.classList.remove("on"); });
+      document.querySelectorAll("section").forEach(function (x) { x.classList.remove("on"); });
+      b.classList.add("on");
+      var sec = $("t-" + b.dataset.t);
+      if (sec) sec.classList.add("on");
+    });
+  }
+
+  // ===================== 工具搜索过滤 =====================
+  // 24 个工具横排，手机上要找很久；按名称/拼音/关键词过滤
+  (function () {
+    var input = $("tool-q"), count = $("tool-count");
+    if (!input || !navBox) return;
+    var btns = Array.prototype.slice.call(navBox.querySelectorAll("button[data-t]"));
+
+    // 无匹配时的提示行
+    var tip = document.createElement("div");
+    tip.className = "nomatch";
+    tip.textContent = "没有匹配的工具，换个词试试（如：压缩、二维码、单位）";
+    navBox.appendChild(tip);
+
+    function apply() {
+      var q = input.value.trim().toLowerCase();
+      var shown = 0;
+      btns.forEach(function (b) {
+        // data-k 是手动维护的关键词（中文名 + 英文/拼音 + 别名）
+        var hay = ((b.textContent || "") + " " + (b.dataset.k || "")).toLowerCase();
+        var hit = !q || hay.indexOf(q) !== -1;
+        b.classList.toggle("hide", !hit);
+        if (hit) shown++;
+      });
+      navBox.classList.toggle("filtering", !!q);
+      if (count) count.textContent = q ? shown + "/" + btns.length : "";
+      // 过滤后若当前选中的被藏了，自动切到第一个可见的
+      var cur = navBox.querySelector("button.on");
+      if (cur && cur.classList.contains("hide")) {
+        var first = btns.find(function (b) { return !b.classList.contains("hide"); });
+        if (first) first.click();
+      }
+    }
+    input.addEventListener("input", apply);
+    input.addEventListener("search", apply);
+    // Esc 清空
+    input.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") { input.value = ""; apply(); }
+    });
+  })();
 
   // ===================== 1. 二维码生成 =====================
   var qr = null;
