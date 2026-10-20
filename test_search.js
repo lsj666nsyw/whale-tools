@@ -40,9 +40,10 @@ const ck = (n, c, d) => {
   const allBtns = () => [...navBox.querySelectorAll("button[data-t]")];
   const visible = () => allBtns().filter((b) => !b.classList.contains("hide"));
 
+  const TOTAL = navAll.length; // 31 个工具 + 1 个「全部工具」入口
   console.log("[初始状态]");
   ck("搜索框存在", !!$("tool-q"));
-  ck("24 个工具全部可见", visible().length === 24, visible().length);
+  ck(`${TOTAL} 个导航全部可见`, visible().length === TOTAL, visible().length);
   ck("计数为空（未搜索）", ($("tool-count").textContent || "") === "", JSON.stringify($("tool-count").textContent));
 
   console.log("\n[关键词过滤]");
@@ -53,7 +54,7 @@ const ck = (n, c, d) => {
   await sleep(100);
   ck("搜「二维码」只剩 1 个", visible().length === 1, visible().map((b) => b.textContent.trim()).join(","));
   ck("显示的是二维码工具", visible()[0] && visible()[0].dataset.t === "qr");
-  ck("计数显示 1/24", ($("tool-count").textContent || "").indexOf("1/24") !== -1, $("tool-count").textContent);
+  ck(`计数显示 1/${TOTAL}`, ($("tool-count").textContent || "").indexOf(`1/${TOTAL}`) !== -1, $("tool-count").textContent);
 
   type("压缩");
   await sleep(100);
@@ -84,7 +85,7 @@ const ck = (n, c, d) => {
   ck("无匹配时显示提示", navBox.classList.contains("filtering") && visible().length === 0, "visible=" + visible().length);
   type("");
   await sleep(100);
-  ck("清空后恢复全部 24 个", visible().length === 24, visible().length);
+  ck(`清空后恢复全部 ${TOTAL} 个`, visible().length === TOTAL, visible().length);
   ck("清空后提示消失", !navBox.classList.contains("filtering"));
   ck("清空后计数为空", ($("tool-count").textContent || "") === "", JSON.stringify($("tool-count").textContent));
 
@@ -93,7 +94,7 @@ const ck = (n, c, d) => {
   await sleep(80);
   input.dispatchEvent(new w.KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
   await sleep(80);
-  ck("Esc 后恢复全部", visible().length === 24 && input.value === "", `visible=${visible().length} value=${JSON.stringify(input.value)}`);
+  ck("Esc 后恢复全部", visible().length === TOTAL && input.value === "", `visible=${visible().length} value=${JSON.stringify(input.value)}`);
 
   console.log("\n[全程无报错]");
   ck("无未捕获错误", errs.length === 0, errs.slice(0, 3).join(" | "));

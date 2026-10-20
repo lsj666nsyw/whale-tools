@@ -72,6 +72,84 @@ input[type=color]{width:52px;height:38px;border:1px solid var(--line);border-rad
 .num-chip{display:inline-block;min-width:52px;text-align:center;padding:8px 14px;border-radius:10px;
   background:linear-gradient(135deg,#f0ecff,#e6e0ff);color:var(--p2);font-weight:700;font-size:17px;
   font-family:ui-monospace,Consolas,monospace;border:1px solid #ddd5f8}
+/* 全部工具网格 */
+.grid-tools{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:9px;margin-top:4px}
+.gt-item{
+  display:flex;flex-direction:column;align-items:flex-start;gap:3px;
+  background:#faf9ff;border:1px solid #ece8fa;border-radius:12px;padding:11px 12px;
+  cursor:pointer;transition:.15s;text-align:left;
+}
+.gt-item:hover{border-color:var(--p);background:#f3efff;transform:translateY(-1px)}
+.gt-item .gt-ic{font-size:19px;line-height:1}
+.gt-item .gt-nm{font-size:13px;font-weight:700;color:var(--ink)}
+.gt-item .gt-ds{font-size:11px;color:var(--ink3);line-height:1.4}
+.gt-item .gt-hot{font-size:9.5px;font-weight:700;color:#fff;background:linear-gradient(135deg,#ff9a3c,#f56b08);
+  padding:1px 6px;border-radius:999px;margin-left:auto;position:absolute;top:8px;right:8px}
+.gt-item{position:relative}
+/* 计算器 */
+#calc-expr{
+  width:100%;font-family:ui-monospace,Consolas,monospace;font-size:20px;font-weight:600;
+  padding:14px;border:1px solid var(--line);border-radius:12px;text-align:right;
+}
+#calc-expr:focus{outline:none;border-color:var(--p);box-shadow:0 0 0 3px rgba(124,92,224,.12)}
+.calc-pad{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-top:10px}
+.calc-pad button{
+  padding:13px 0;border:1px solid var(--line);background:#fff;border-radius:10px;
+  font-size:16px;font-weight:700;color:var(--ink);cursor:pointer;transition:.12s;
+}
+.calc-pad button:hover{border-color:var(--p);color:var(--p);background:#faf9ff}
+.calc-pad button:active{transform:scale(.96)}
+.calc-pad button.op{background:#f3efff;color:var(--p2)}
+.calc-pad button.eq{background:linear-gradient(135deg,#9b7cf0,#5b3fc4);color:#fff;border-color:transparent}
+.calc-pad button.fn{background:#f7f7fb;color:var(--ink2);font-size:14px}
+.calc-result{
+  margin-top:10px;padding:13px 15px;background:#faf9ff;border:1px solid #ece8fa;border-radius:11px;
+  font-family:ui-monospace,Consolas,monospace;font-size:19px;font-weight:700;color:var(--p2);
+  word-break:break-all;text-align:right;
+}
+#calc-hist{margin-top:6px;max-height:150px;overflow-y:auto}
+#calc-hist .ch-item{
+  display:flex;justify-content:space-between;gap:10px;padding:6px 9px;border-radius:8px;
+  font-family:ui-monospace,Consolas,monospace;font-size:12.5px;color:var(--ink2);cursor:pointer;
+}
+#calc-hist .ch-item:hover{background:#f3efff;color:var(--p)}
+/* 文本对比 */
+.diff-cols{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+@media(max-width:560px){.diff-cols{grid-template-columns:1fr}}
+.diff-stat{font-size:12.5px;color:var(--ink2);margin:10px 0 4px;padding:8px 11px;background:#faf9ff;border-radius:9px}
+.diff-line{
+  font-family:ui-monospace,Consolas,monospace;font-size:12.5px;padding:4px 10px;border-radius:6px;
+  white-space:pre-wrap;word-break:break-all;margin-bottom:2px;
+}
+.diff-line.add{background:#eafaf0;color:#1a7f47}
+.diff-line.del{background:#fdeef0;color:#b03040}
+.diff-line.same{color:var(--ink3)}
+.diff-line .mk{display:inline-block;width:16px;font-weight:700}
+/* JSON/CSV */
+.seg{display:flex;border:1px solid var(--line);border-radius:9px;overflow:hidden}
+.seg button{border:none;background:#fff;padding:7px 13px;font-size:13px;color:var(--ink2);cursor:pointer}
+.seg button.on{background:var(--p);color:#fff}
+/* 假文 */
+.lt-out{
+  margin-top:10px;padding:14px;background:#faf9ff;border:1px solid #ece8fa;border-radius:11px;
+  font-size:13.5px;line-height:1.9;color:var(--ink);max-height:320px;overflow-y:auto;white-space:pre-wrap;
+}
+/* 关键字检测 */
+.gjk-out{
+  margin-top:10px;padding:14px;background:#faf9ff;border:1px solid #ece8fa;border-radius:11px;
+  font-size:13.5px;line-height:2;color:var(--ink);max-height:340px;overflow-y:auto;white-space:pre-wrap;word-break:break-word;
+}
+.gjk-out mark{background:#ffe0e6;color:#c02040;padding:1px 3px;border-radius:4px;font-weight:600}
+/* Emoji */
+.emj-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(44px,1fr));gap:6px;margin-top:10px;
+  max-height:380px;overflow-y:auto;padding:4px;
+}
+.emj-grid button{
+  aspect-ratio:1;border:1px solid var(--line);background:#fff;border-radius:10px;
+  font-size:23px;cursor:pointer;transition:.12s;display:flex;align-items:center;justify-content:center;
+}
+.emj-grid button:hover{border-color:var(--p);background:#f3efff;transform:scale(1.1)}
 footer{border-top:1px solid var(--line);background:#fff;padding:20px 0 32px;margin-top:10px}
 footer .wrap{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;font-size:12.5px;color:var(--ink3)}
 .badges{display:flex;gap:8px;flex-wrap:wrap}
@@ -130,30 +208,38 @@ nav.filtering .nomatch{display:block}
     <span id="tool-count" class="toolcount"></span>
   </div>
   <nav id="tool-nav">
-    <button class="on" data-t="qr" data-k="二维码 qr code 生成 名片">📱 二维码</button>
-    <button data-t="color" data-k="颜色 color 取色 调色 hex rgb">🎨 颜色</button>
-    <button data-t="text" data-k="文本 text 去重 排序 大小写">📝 文本</button>
-    <button data-t="unit" data-k="单位 换算 长度 重量 温度">📏 单位</button>
-    <button data-t="pwd" data-k="密码 生成 随机 安全 强度">🔐 密码</button>
-    <button data-t="ts" data-k="时间戳 timestamp 时间 转换">⏰ 时间戳</button>
+    <button class="on" data-t="all" data-k="全部 功能 总览 列表 所有 工具">📋 全部工具</button>
+    <button data-t="qr" data-k="二维码 qr code 生成 名片">📱 二维码</button>
+    <button data-t="text" data-k="文本 text 去重 排序 大小写">📝 文本处理</button>
     <button data-t="json" data-k="json 格式化 压缩 校验">{} JSON</button>
-    <button data-t="img" data-k="图片 压缩 尺寸 体积 改大小">🖼 图片压缩</button>
-    <button data-t="date" data-k="日期 计算 相差 天数 工作日">📅 日期</button>
-    <button data-t="rand" data-k="抽签 随机 抽取 名单">🎲 抽签</button>
-    <button data-t="name" data-k="命名 风格 驼峰 下划线 常量">🔤 命名</button>
     <button data-t="b64" data-k="base64 编码 解码 加密">🔡 Base64</button>
     <button data-t="url" data-k="url encode decode 转义 链接">🔗 URL</button>
     <button data-t="hash" data-k="哈希 hash md5 sha 摘要">#️⃣ 哈希</button>
-    <button data-t="morse" data-k="摩斯 morse 电码">📡 摩斯</button>
-    <button data-t="cnt" data-k="字数 统计 字符 中文 单词">🔢 字数</button>
-    <button data-t="sc" data-k="简繁 简体 繁体 转换 中文">🈶 简繁</button>
+    <button data-t="cnt" data-k="字数 统计 字符 中文 单词">🔢 字数统计</button>
+    <button data-t="color" data-k="颜色 color 取色 调色 hex rgb">🎨 颜色</button>
+    <button data-t="ts" data-k="时间戳 timestamp 时间 转换">⏰ 时间戳</button>
+    <button data-t="pwd" data-k="密码 生成 随机 安全 强度">🔐 密码</button>
+    <button data-t="unit" data-k="单位 换算 长度 重量 温度">📏 单位</button>
     <button data-t="pct" data-k="百分比 占比 增长率 计算">％ 百分比</button>
+    <button data-t="cv" data-k="校验 验证 校验位 内容 类型">✅ 格式校验</button>
+    <button data-t="img" data-k="图片 压缩 尺寸 体积 改大小">🖼 图片压缩</button>
+    <button data-t="date" data-k="日期 计算 相差 天数 工作日">📅 日期计算</button>
+    <button data-t="sc" data-k="简繁 简体 繁体 转换 中文">🈶 简繁转换</button>
+    <button data-t="morse" data-k="摩斯 morse 电码">📡 摩斯密码</button>
+    <button data-t="fmt" data-k="代码 格式 美化 json js css">🧹 代码格式</button>
+    <button data-t="name" data-k="命名 风格 驼峰 下划线 常量">🔤 命名转换</button>
+    <button data-t="zs" data-k="生肖 属相 年份 农历">🐲 生肖星座</button>
+    <button data-t="rt" data-k="比例 换算 缩放 尺寸 分辨率">⚖️ 比例换算</button>
+    <button data-t="rand" data-k="抽签 随机 抽取 名单">🎲 随机抽签</button>
     <button data-t="rn" data-k="随机数 范围 生成">🎯 随机数</button>
     <button data-t="idcard" data-k="身份证 校验 归属地 性别 生日">🆔 身份证</button>
-    <button data-t="cv" data-k="校验 验证 校验位 内容 类型">✅ 校验</button>
-    <button data-t="fmt" data-k="代码 格式 美化 json js css">🧹 代码格式</button>
-    <button data-t="zs" data-k="生肖 属相 年份 农历">🐲 生肖</button>
-    <button data-t="rt" data-k="比例 换算 缩放 尺寸 分辨率">⚖️ 比例</button>
+    <button data-t="calc" data-k="计算器 算术 四则 科学 计算">🧮 计算器</button>
+    <button data-t="diff" data-k="文本 对比 差异 diff 比较">🔍 文本对比</button>
+    <button data-t="cvt" data-k="json csv 表格 互转 转换">🔁 JSON⇄CSV</button>
+    <button data-t="md5" data-k="md5 摘要 校验 文件">#️⃣ MD5</button>
+    <button data-t="lt" data-k=" Lorem 占位 假文 测试 数据">📄 假文生成</button>
+    <button data-t="gjk" data-k="关键字 敏感词 违禁 过滤 检测">🚫 关键字检测</button>
+    <button data-t="emj" data-k="emoji 表情 符号 复制 选择">😀 Emoji</button>
   </nav>
 
   <div class="promo">🔒 所有工具都在<b>你的浏览器里</b>运行，输入的内容不会发送到任何服务器。不用注册、不限次数、完全免费。</div>
@@ -165,8 +251,17 @@ nav.filtering .nomatch{display:block}
     <a class="cn-item cn-home" href="https://lsj666nsyw.github.io/whale-home/">🐋 全部工具<b>总入口</b></a>
   </div>
 
+  <!-- ========== 全部工具总览 ========== -->
+  <section id="t-all" class="on">
+    <div class="card">
+      <h3>📋 全部工具（<span id="all-count">0</span> 个）</h3>
+      <div class="hint">按使用频率排序，点卡片直接打开。也可以在上方搜索框输入关键词。</div>
+      <div class="grid-tools" id="all-grid"></div>
+    </div>
+  </section>
+
   <!-- ========== 二维码 ========== -->
-  <section id="t-qr" class="on">
+  <section id="t-qr">
     <div class="card">
       <h3>二维码生成</h3>
       <div class="hint">支持网址、文字、微信号、WiFi 密码等任意内容</div>
@@ -590,6 +685,155 @@ nav.filtering .nomatch{display:block}
       <div id="rt-out" style="margin-top:10px"></div>
     </div>
   </section>
+
+  <!-- ========== 25. 计算器 ========== -->
+  <section id="t-calc">
+    <div class="card">
+      <h3>🧮 计算器</h3>
+      <div class="hint">支持四则运算、括号、百分比、幂、开方、三角函数。点历史记录可回填。</div>
+      <input type="text" id="calc-expr" placeholder="例如 (12+8)*3.5-20%" autocomplete="off" spellcheck="false">
+      <div class="calc-pad" id="calc-pad"></div>
+      <div class="opt" style="margin-top:10px">
+        <button class="btn2" id="calc-eq">= 计算</button>
+        <button class="btn2" id="calc-copy">复制结果</button>
+        <button class="btn2" id="calc-clear">清空</button>
+      </div>
+      <div class="calc-result" id="calc-result">输入表达式后按 = 计算</div>
+      <div class="hint" style="margin-top:10px">历史记录（点一下回填）</div>
+      <div id="calc-hist"></div>
+    </div>
+  </section>
+
+  <!-- ========== 26. 文本对比 ========== -->
+  <section id="t-diff">
+    <div class="card">
+      <h3>🔍 文本对比</h3>
+      <div class="hint">逐行比较两段文本的差异：新增、删除、相同一目了然</div>
+      <div class="diff-cols">
+        <textarea id="diff-a" rows="9" placeholder="原始文本 A（每行一条）"></textarea>
+        <textarea id="diff-b" rows="9" placeholder="对比文本 B（每行一条）"></textarea>
+      </div>
+      <div class="opt">
+        <label class="check"><input type="checkbox" id="diff-ignore-case">忽略大小写</label>
+        <label class="check"><input type="checkbox" id="diff-trim" checked>忽略首尾空格</label>
+        <button class="btn2" id="diff-go">对比</button>
+        <button class="btn2" id="diff-swap">交换 A/B</button>
+      </div>
+      <div class="diff-stat" id="diff-stat"></div>
+      <div id="diff-out" style="margin-top:10px"></div>
+    </div>
+  </section>
+
+  <!-- ========== 27. JSON ⇄ CSV ========== -->
+  <section id="t-cvt">
+    <div class="card">
+      <h3>🔁 JSON ⇄ CSV 互转</h3>
+      <div class="hint">对象数组转 CSV（带表头），或把 CSV 转回 JSON。适合整理接口数据、导表格。</div>
+      <div class="opt">
+        <div class="seg" id="cvt-mode">
+          <button data-v="j2c" class="on">JSON → CSV</button>
+          <button data-v="c2j">CSV → JSON</button>
+        </div>
+        <label class="check"><input type="checkbox" id="cvt-bom" checked>加 BOM（Excel 不乱码）</label>
+      </div>
+      <textarea id="cvt-in" rows="7" placeholder='JSON 模式：[{"姓名":"张三","分数":90},{"姓名":"李四","分数":85}]' spellcheck="false"></textarea>
+      <div class="opt">
+        <button class="btn2" id="cvt-go">转换</button>
+        <button class="btn2" id="cvt-copy">复制结果</button>
+        <button class="btn2" id="cvt-dl">下载文件</button>
+      </div>
+      <div class="hint" id="cvt-stat"></div>
+      <textarea id="cvt-out" rows="7" placeholder="结果" spellcheck="false" style="font-family:ui-monospace,Consolas,monospace"></textarea>
+    </div>
+  </section>
+
+  <!-- ========== 28. MD5 专用 ========== -->
+  <section id="t-md5">
+    <div class="card">
+      <h3>#️⃣ MD5 计算</h3>
+      <div class="hint">支持文本和整个文件，常用于校验下载文件完整性、比对两份文档。</div>
+      <div class="opt">
+        <input type="text" id="md5-text" placeholder="输入要计算 MD5 的文本" style="flex:1">
+        <button class="btn2" id="md5-tgo">算文本</button>
+      </div>
+      <div class="opt">
+        <button class="btn2" id="md5-fpick">选择文件算 MD5</button>
+        <input type="file" id="md5-file" hidden multiple>
+        <span style="font-size:12.5px;color:var(--ink3)">可多选，逐个计算</span>
+      </div>
+      <div id="md5-out" style="margin-top:10px"></div>
+      <div class="hint" style="margin-top:8px">⚠ MD5 不适用于密码等安全场景，仅作校验用途。</div>
+    </div>
+  </section>
+
+  <!-- ========== 29. Lorem 假文 ========== -->
+  <section id="t-lt">
+    <div class="card">
+      <h3>📄 Lorem 假文生成</h3>
+      <div class="hint">生成占位文本，用于设计稿排版、测试数据填充</div>
+      <div class="opt">
+        <label>类型</label>
+        <select id="lt-type">
+          <option value="para">段落</option>
+          <option value="sent">句子</option>
+          <option value="word">单词</option>
+          <option value="li">列表项</option>
+        </select>
+        <label>数量</label>
+        <input type="number" id="lt-n" value="3" min="1" max="50" style="width:70px">
+        <button class="btn2" id="lt-go">生成</button>
+        <button class="btn2" id="lt-copy">复制</button>
+      </div>
+      <div class="opt">
+        <label class="check"><input type="checkbox" id="lt-cn" checked>中文假文（更贴近实际排版）</label>
+      </div>
+      <div class="lt-out" id="lt-out"></div>
+    </div>
+  </section>
+
+  <!-- ========== 30. 关键字检测 ========== -->
+  <section id="t-gjk">
+    <div class="card">
+      <h3>🚫 关键字 / 敏感词检测</h3>
+      <div class="hint">批量检测文本里是否含有关键字，标红并计数。适合内容审核、合规自查。</div>
+      <div class="opt">
+        <textarea id="gjk-keys" rows="3" placeholder="关键字列表，每行一个或用逗号分隔&#10;例如：&#10;免费&#10;最强,第一"></textarea>
+      </div>
+      <div class="opt">
+        <label class="check"><input type="checkbox" id="gjk-re">按正则匹配</label>
+        <label class="check"><input type="checkbox" id="gjk-ci" checked>忽略大小写</label>
+      </div>
+      <textarea id="gjk-in" rows="6" placeholder="粘贴要检测的文本…"></textarea>
+      <div class="opt">
+        <button class="btn2" id="gjk-go">检测</button>
+        <button class="btn2" id="gjk-copy">复制结果</button>
+      </div>
+      <div class="hint" id="gjk-stat"></div>
+      <div class="gjk-out" id="gjk-out"></div>
+    </div>
+  </section>
+
+  <!-- ========== 31. Emoji 选择器 ========== -->
+  <section id="t-emj">
+    <div class="card">
+      <h3>😀 Emoji 表情选择器</h3>
+      <div class="hint">点表情即可复制。按分类筛选，搜索关键词。</div>
+      <div class="opt">
+        <input type="text" id="emj-q" placeholder="搜索：笑脸 / 心 / 动物 / 食物…" style="flex:1">
+        <select id="emj-cat">
+          <option value="all">全部分类</option>
+          <option value="face">笑脸情绪</option>
+          <option value="gest">手势身体</option>
+          <option value="animal">动物自然</option>
+          <option value="food">食物饮料</option>
+          <option value="act">活动旅行</option>
+          <option value="obj">物品符号</option>
+        </select>
+      </div>
+      <div class="emj-grid" id="emj-grid"></div>
+      <div class="hint" id="emj-stat"></div>
+    </div>
+  </section>
 </main>
 
 <footer>
@@ -598,12 +842,13 @@ nav.filtering .nomatch{display:block}
       <span class="badge">✓ 全免费</span><span class="badge">✓ 不用注册</span>
       <span class="badge">✓ 不上传</span><span class="badge">✓ 手机可用</span>
     </div>
-    <div>24 个工具 · 全部本地运行 · 无限次使用 · 完全免费</div>
+    <div><span id="foot-count">31</span> 个工具 · 全部本地运行 · 无限次使用 · 完全免费</div>
   </div>
 </footer>
 
 <script src="libs/qrcode.js"></script>
-<script src="tools.js?v=2"></script>
-<script src="tools2.js?v=2"></script>
+<script src="tools.js?v=3"></script>
+<script src="tools2.js?v=3"></script>
+<script src="tools3.js?v=3"></script>
 </body>
 </html>

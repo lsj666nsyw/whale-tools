@@ -1,10 +1,10 @@
 {
   "name": "whale-tools",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": true,
-  "description": "鲸鱼工具箱 — 24 个常用小工具，纯前端本地运行",
+  "description": "鲸鱼工具箱 — 31 个常用小工具，纯前端本地运行",
   "scripts": {
-    "test": "node test_smoke.js && node test_search.js",
+    "test": "node test_smoke.js && node test_search.js && node test_new.js",
     "test:calib": "node _calib_search.js",
     "serve": "python -m http.server 8098 --bind 127.0.0.1"
   }

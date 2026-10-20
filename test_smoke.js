@@ -98,7 +98,7 @@ const ck = (n, c, d) => {
   ck("搜索框存在", !!searchInput);
   ck("每个工具都带搜索关键词 data-k", navAll.every((b) => (b.dataset.k || "").length > 0),
      `缺 data-k: ${navAll.filter((b) => !b.dataset.k).map((b) => b.dataset.t).join(",") || "无"}`);
-  ck("初始 24 个全可见", navAll.filter((b) => !b.classList.contains("hide")).length === 24);
+  ck(`初始 ${navAll.length} 个全可见`, navAll.filter((b) => !b.classList.contains("hide")).length === navAll.length);
   if (searchInput) {
     searchInput.value = "二维码";
     searchInput.dispatchEvent(new w.Event("input", { bubbles: true }));
@@ -108,10 +108,10 @@ const ck = (n, c, d) => {
     searchInput.value = "";
     searchInput.dispatchEvent(new w.Event("input", { bubbles: true }));
     await sleep(120);
-    ck("清空后恢复 24 个", navAll.filter((b) => !b.classList.contains("hide")).length === 24);
+    ck(`清空后恢复 ${navAll.length} 个`, navAll.filter((b) => !b.classList.contains("hide")).length === navAll.length);
   }
 
-  console.log("\n[24 个小工具抽查：有输入且能响应]");
+  console.log("\n[小工具抽查：有输入且能响应]");
   // 这些工具是纯文本/数值计算，逐个填输入点按钮，看是否有输出
   const probes = [
     { t: "b64", desc: "Base64 编码" },
