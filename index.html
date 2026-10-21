@@ -7,254 +7,312 @@
 <meta name="description" content="24 个免费在线小工具：二维码生成、颜色转换、文本处理、单位换算、密码生成、时间戳、JSON格式化、图片压缩、日期计算、随机抽签、命名转换、Base64、URL编解码、哈希、摩斯密码、字数统计、简繁转换、百分比、随机数、身份证校验、格式校验、代码格式化、生肖星座、比例换算。全部本地运行，不上传。">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%237c5ce0'/%3E%3Ctext x='32' y='44' font-size='32' text-anchor='middle'%3E%F0%9F%A7%B0%3C/text%3E%3C/svg%3E">
 <style>
-:root{--p:#7c5ce0;--p2:#5b3fc4;--ink:#1a2233;--ink2:#55617a;--ink3:#8b95a8;--line:#e3e8f0;--bg:#f6f5fb;--card:#fff;--r:14px}
+/* 设计原则：单色系、无渐变、无装饰图形、排版建立层级。
+   去掉 AI 味的渐变、emoji、✓ 徽章、彩色卡片。 */
+
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei UI",sans-serif;
-  background:var(--bg);color:var(--ink);line-height:1.6;padding-bottom:env(safe-area-inset-bottom)}
-.wrap{max-width:900px;margin:0 auto;padding:0 14px}
-header{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.94);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
-.hd{display:flex;align-items:center;gap:10px;height:54px}
-.logo{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,#9b7cf0,#5b3fc4);
-  display:flex;align-items:center;justify-content:center;font-size:17px;flex:none}
-.hd b{font-size:16px}
-.hd .tag{font-size:10.5px;color:#fff;background:var(--p);padding:2px 8px;border-radius:999px;font-weight:600}
-.hd .pc{margin-left:auto;font-size:12px;color:var(--ink3)}
-nav{display:flex;gap:7px;padding:12px 0 4px;overflow-x:auto;scrollbar-width:none}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei UI",sans-serif;background:var(--bg);color:var(--ink);line-height:1.7;font-size:15px;padding-bottom:env(safe-area-inset-bottom)}
+.wrap{max-width:860px;margin:0 auto;padding:0 20px}
+
+
+/* 设计原则：单色系、无渐变、无装饰图形、排版建立层级。
+   去掉了 AI 味较重的渐变 hero、emoji 图标、✓ 信任徽章、彩色卡片。 */
+:root{
+  --ink:#1a1a1a;
+  --ink2:#555;
+  --ink3:#999;
+  --line:#e8e8e8;
+  --bg:#fafafa;
+  --card:#fff;
+  --accent:#2b5cff;
+  --accent-dim:#f0f4ff;
+  --radius:4px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei UI",sans-serif;
+  background:var(--bg);color:var(--ink);line-height:1.7;font-size:15px;
+  padding-bottom:env(safe-area-inset-bottom);
+}
+.wrap{max-width:860px;margin:0 auto;padding:0 20px}
+
+/* ---------- 顶栏 ---------- */
+.top{
+  position:sticky;top:0;z-index:40;background:rgba(255,255,255,.92);
+  backdrop-filter:blur(8px);border-bottom:1px solid var(--line);
+}
+.top .wrap{display:flex;align-items:center;height:56px;gap:10px}
+.top .mk{width:28px;height:28px;flex:none}
+.top .mk svg{width:100%;height:100%;display:block}
+.top b{font-size:15px;font-weight:600}
+.top .pc{margin-left:auto;font-size:12px;color:var(--ink3)}
+
+/* ---------- 搜索框 ---------- */
+.search{padding:14px 0 6px}
+.search input{
+  width:100%;border:1px solid var(--line);border-radius:var(--radius);
+  padding:10px 14px;font-size:14px;background:var(--card);color:var(--ink);
+}
+.search input:focus{outline:none;border-color:var(--accent)}
+
+/* ---------- 导航 ---------- */
+nav{display:flex;gap:0;padding:8px 0;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid var(--line)}
 nav::-webkit-scrollbar{display:none}
-nav button{flex:none;padding:8px 15px;border-radius:999px;border:1px solid var(--line);background:#fff;
-  font-size:13.5px;font-weight:600;color:var(--ink2);cursor:pointer;white-space:nowrap}
-nav button.on{background:linear-gradient(135deg,#9b7cf0,#5b3fc4);color:#fff;border-color:transparent;
-  box-shadow:0 4px 14px rgba(124,92,224,.3)}
-section{display:none;padding:10px 0 30px}
-section.on{display:block}
-.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px;margin-bottom:14px}
-.card h3{font-size:14.5px;margin-bottom:10px;display:flex;align-items:center;gap:7px}
-.hint{font-size:12.5px;color:var(--ink3);margin-bottom:10px}
+nav button{
+  flex:none;padding:8px 12px;font-size:13px;color:var(--ink2);
+  cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;
+  transition:.12s;background:none;border-top:none;border-left:none;border-right:none;
+}
+nav button:hover{color:var(--ink)}
+nav button.on{color:var(--accent);border-bottom-color:var(--accent);font-weight:600}
+nav button.hide{display:none}
+nav .nomatch{display:none;font-size:13px;color:var(--ink3);padding:10px 4px}
+nav.filtering .nomatch{display:block}
+
+/* ---------- 卡片 ---------- */
+.card{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  padding:18px 20px;margin-bottom:14px;
+}
+.card h3{font-size:14px;font-weight:600;margin-bottom:10px}
+.card h3 .num{font-size:11px;color:var(--ink3);margin-right:8px}
+.hint{font-size:13px;color:var(--ink2);margin-bottom:10px}
+.hint b{color:var(--ink)}
+
+/* ---------- 表单元素 ---------- */
 label{font-size:13px;color:var(--ink2)}
 select,input[type=text],input[type=number],input[type=date],textarea{
-  border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:14px;background:#fff;
-  color:var(--ink);max-width:100%;font-family:inherit}
-textarea{width:100%;resize:vertical;line-height:1.6}
-input[type=range]{accent-color:var(--p);width:140px}
+  border:1px solid var(--line);border-radius:var(--radius);padding:8px 12px;font-size:14px;
+  background:#fff;color:var(--ink);max-width:100%;font-family:inherit;
+}
+textarea{width:100%;resize:vertical;line-height:1.7}
+input[type=range]{accent-color:var(--accent);width:140px}
 .opt{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:8px 0}
 .check{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--ink2);cursor:pointer}
-.check input{width:16px;height:16px;accent-color:var(--p)}
-.go{width:100%;padding:13px;border:none;border-radius:11px;font-size:15.5px;font-weight:700;color:#fff;cursor:pointer;
-  background:linear-gradient(135deg,#9b7cf0,#5b3fc4);box-shadow:0 6px 18px rgba(124,92,224,.32)}
-.go:disabled{opacity:.45;cursor:default}
-.btn2{padding:9px 16px;border:1px solid var(--line);background:#fff;border-radius:9px;font-size:13.5px;
-  color:var(--ink2);cursor:pointer;font-weight:600}
-.btn2:hover{border-color:var(--p);color:var(--p)}
-/* 二维码 */
-#qr-box{display:flex;align-items:center;justify-content:center;min-height:200px;background:#faf9ff;
-  border:1px dashed #d9d2f5;border-radius:12px;padding:14px;margin:10px 0}
+.check input{width:16px;height:16px;accent-color:var(--accent)}
+
+/* ---------- 按钮 ---------- */
+.go{
+  width:100%;padding:12px;border:none;border-radius:var(--radius);
+  font-size:14px;font-weight:600;color:#fff;cursor:pointer;background:var(--accent);
+}
+.go:hover{opacity:.88}
+.go:disabled{opacity:.4;cursor:default}
+.btn2{
+  padding:8px 14px;border:1px solid var(--line);background:#fff;
+  border-radius:var(--radius);font-size:13px;color:var(--ink2);cursor:pointer;font-weight:500;
+}
+.btn2:hover{border-color:var(--accent);color:var(--accent)}
+
+/* ---------- 二维码 ---------- */
+#qr-box{display:flex;align-items:center;justify-content:center;min-height:200px;background:#fff;
+  border:1px solid var(--line);border-radius:var(--radius);padding:14px;margin:10px 0}
 #qr-box img{max-width:100%;image-rendering:pixelated}
-/* 颜色 */
-.cp-preview{height:80px;border-radius:12px;border:1px solid var(--line);margin-bottom:12px}
+
+/* ---------- 颜色 ---------- */
+.cp-preview{height:80px;border-radius:var(--radius);border:1px solid var(--line);margin-bottom:12px}
 .cp-row{display:flex;gap:8px;align-items:center;margin:7px 0}
-.cp-row b{font-size:12.5px;color:var(--ink3);min-width:38px}
+.cp-row b{font-size:12.5px;color:var(--ink3);min-width:38px;font-weight:500}
 .cp-row input{flex:1;font-family:ui-monospace,Consolas,monospace;font-size:13px}
 .cp-row .cp-copy{flex:none;padding:6px 11px;font-size:12px;border:1px solid var(--line);
-  background:#fff;border-radius:7px;cursor:pointer;color:var(--ink2)}
+  background:#fff;border-radius:var(--radius);cursor:pointer;color:var(--ink2)}
+.cp-row .cp-copy:hover{border-color:var(--accent);color:var(--accent)}
 #c-shades{display:flex;gap:5px;margin-top:12px}
-#c-shades i{flex:1;height:34px;border-radius:7px;cursor:pointer;border:1px solid rgba(0,0,0,.07)}
-input[type=color]{width:52px;height:38px;border:1px solid var(--line);border-radius:8px;padding:2px;background:#fff;cursor:pointer}
-/* 结果行 */
-.ts-row{display:flex;gap:10px;align-items:center;padding:8px 0;border-bottom:1px dashed var(--line);font-size:13.5px}
+#c-shades i{flex:1;height:34px;border-radius:var(--radius);cursor:pointer;border:1px solid rgba(0,0,0,.07)}
+input[type=color]{width:52px;height:38px;border:1px solid var(--line);border-radius:var(--radius);padding:2px;background:#fff;cursor:pointer}
+
+/* ---------- 结果行 ---------- */
+.ts-row{display:flex;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line);font-size:13.5px}
 .ts-row:last-child{border-bottom:none}
-.ts-row b{color:var(--ink3);font-size:12.5px;font-weight:600;min-width:76px;flex:none}
+.ts-row b{color:var(--ink3);font-size:12.5px;font-weight:500;min-width:76px;flex:none}
 .ts-val{font-family:ui-monospace,Consolas,monospace;color:var(--ink);cursor:pointer;word-break:break-all;flex:1}
-.ts-val:hover{color:var(--p)}
-/* 密码强度 */
-.pbar{height:5px;background:#e8e6f5;border-radius:3px;overflow:hidden;margin:8px 0}
-.pbar i{display:block;height:100%;width:0;transition:.3s}
-/* 随机数芯片 */
-.num-chip{display:inline-block;min-width:52px;text-align:center;padding:8px 14px;border-radius:10px;
-  background:linear-gradient(135deg,#f0ecff,#e6e0ff);color:var(--p2);font-weight:700;font-size:17px;
-  font-family:ui-monospace,Consolas,monospace;border:1px solid #ddd5f8}
-/* 全部工具网格 */
-.grid-tools{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:9px;margin-top:4px}
+.ts-val:hover{color:var(--accent)}
+
+/* ---------- 密码强度 ---------- */
+.pbar{height:4px;background:var(--line);border-radius:2px;overflow:hidden;margin:8px 0}
+.pbar i{display:block;height:100%;width:0;transition:.3s;background:var(--accent)}
+
+/* ---------- 随机数芯片 ---------- */
+.num-chip{display:inline-block;min-width:52px;text-align:center;padding:8px 14px;
+  background:#fff;border:1px solid var(--line);color:var(--ink);font-weight:600;font-size:17px;
+  font-family:ui-monospace,Consolas,monospace}
+
+/* ---------- 全部工具网格 ---------- */
+.grid-tools{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin-top:14px}
 .gt-item{
   display:flex;flex-direction:column;align-items:flex-start;gap:3px;
-  background:#faf9ff;border:1px solid #ece8fa;border-radius:12px;padding:11px 12px;
-  cursor:pointer;transition:.15s;text-align:left;
+  background:var(--card);padding:12px 14px;cursor:pointer;transition:.12s;text-align:left;
 }
-.gt-item:hover{border-color:var(--p);background:#f3efff;transform:translateY(-1px)}
-.gt-item .gt-ic{font-size:19px;line-height:1}
-.gt-item .gt-nm{font-size:13px;font-weight:700;color:var(--ink)}
-.gt-item .gt-ds{font-size:11px;color:var(--ink3);line-height:1.4}
-.gt-item .gt-hot{font-size:9.5px;font-weight:700;color:#fff;background:linear-gradient(135deg,#ff9a3c,#f56b08);
-  padding:1px 6px;border-radius:999px;margin-left:auto;position:absolute;top:8px;right:8px}
+.gt-item:hover{background:var(--accent-dim)}
+.gt-item .gt-ic{font-size:16px;line-height:1;color:var(--ink3)}
+.gt-item .gt-nm{font-size:13px;font-weight:600;color:var(--ink)}
+.gt-item .gt-ds{font-size:11.5px;color:var(--ink3);line-height:1.4}
+.gt-item .gt-hot{font-size:9.5px;font-weight:600;color:var(--accent);
+  padding:1px 6px;border:1px solid var(--accent);border-radius:999px;margin-left:auto;position:absolute;top:8px;right:8px}
 .gt-item{position:relative}
-/* 计算器 */
+
+/* ---------- 计算器 ---------- */
 #calc-expr{
-  width:100%;font-family:ui-monospace,Consolas,monospace;font-size:20px;font-weight:600;
-  padding:14px;border:1px solid var(--line);border-radius:12px;text-align:right;
+  width:100%;font-family:ui-monospace,Consolas,monospace;font-size:18px;font-weight:600;
+  padding:12px 14px;border:1px solid var(--line);border-radius:var(--radius);text-align:right;background:#fff;
 }
-#calc-expr:focus{outline:none;border-color:var(--p);box-shadow:0 0 0 3px rgba(124,92,224,.12)}
+#calc-expr:focus{outline:none;border-color:var(--accent)}
 .calc-pad{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-top:10px}
 .calc-pad button{
-  padding:13px 0;border:1px solid var(--line);background:#fff;border-radius:10px;
-  font-size:16px;font-weight:700;color:var(--ink);cursor:pointer;transition:.12s;
+  padding:12px 0;border:1px solid var(--line);background:#fff;border-radius:var(--radius);
+  font-size:15px;font-weight:600;color:var(--ink);cursor:pointer;transition:.12s;
 }
-.calc-pad button:hover{border-color:var(--p);color:var(--p);background:#faf9ff}
+.calc-pad button:hover{border-color:var(--accent);background:var(--accent-dim)}
 .calc-pad button:active{transform:scale(.96)}
-.calc-pad button.op{background:#f3efff;color:var(--p2)}
-.calc-pad button.eq{background:linear-gradient(135deg,#9b7cf0,#5b3fc4);color:#fff;border-color:transparent}
-.calc-pad button.fn{background:#f7f7fb;color:var(--ink2);font-size:14px}
+.calc-pad button.op{background:#f5f5f5}
+.calc-pad button.eq{background:var(--accent);color:#fff;border-color:var(--accent)}
+.calc-pad button.fn{background:#f5f5f5;color:var(--ink2);font-size:13px}
 .calc-result{
-  margin-top:10px;padding:13px 15px;background:#faf9ff;border:1px solid #ece8fa;border-radius:11px;
-  font-family:ui-monospace,Consolas,monospace;font-size:19px;font-weight:700;color:var(--p2);
+  margin-top:10px;padding:12px 14px;background:#fff;border:1px solid var(--line);border-radius:var(--radius);
+  font-family:ui-monospace,Consolas,monospace;font-size:18px;font-weight:600;color:var(--ink);
   word-break:break-all;text-align:right;
 }
 #calc-hist{margin-top:6px;max-height:150px;overflow-y:auto}
 #calc-hist .ch-item{
-  display:flex;justify-content:space-between;gap:10px;padding:6px 9px;border-radius:8px;
+  display:flex;justify-content:space-between;gap:10px;padding:6px 9px;
   font-family:ui-monospace,Consolas,monospace;font-size:12.5px;color:var(--ink2);cursor:pointer;
 }
-#calc-hist .ch-item:hover{background:#f3efff;color:var(--p)}
-/* 文本对比 */
+#calc-hist .ch-item:hover{background:var(--accent-dim);color:var(--accent)}
+
+/* ---------- 文本对比 ---------- */
 .diff-cols{display:grid;grid-template-columns:1fr 1fr;gap:9px}
 @media(max-width:560px){.diff-cols{grid-template-columns:1fr}}
-.diff-stat{font-size:12.5px;color:var(--ink2);margin:10px 0 4px;padding:8px 11px;background:#faf9ff;border-radius:9px}
+.diff-stat{font-size:13px;color:var(--ink2);margin:10px 0 4px;padding:8px 11px;background:#fff;border:1px solid var(--line);border-radius:var(--radius)}
 .diff-line{
-  font-family:ui-monospace,Consolas,monospace;font-size:12.5px;padding:4px 10px;border-radius:6px;
+  font-family:ui-monospace,Consolas,monospace;font-size:12.5px;padding:4px 10px;
   white-space:pre-wrap;word-break:break-all;margin-bottom:2px;
 }
 .diff-line.add{background:#eafaf0;color:#1a7f47}
 .diff-line.del{background:#fdeef0;color:#b03040}
 .diff-line.same{color:var(--ink3)}
-.diff-line .mk{display:inline-block;width:16px;font-weight:700}
-/* JSON/CSV */
-.seg{display:flex;border:1px solid var(--line);border-radius:9px;overflow:hidden}
+.diff-line .mk{display:inline-block;width:16px;font-weight:600}
+
+/* ---------- 分段选择 ---------- */
+.seg{display:flex;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
 .seg button{border:none;background:#fff;padding:7px 13px;font-size:13px;color:var(--ink2);cursor:pointer}
-.seg button.on{background:var(--p);color:#fff}
-/* 假文 */
+.seg button.on{background:var(--accent);color:#fff}
+
+/* ---------- 假文 ---------- */
 .lt-out{
-  margin-top:10px;padding:14px;background:#faf9ff;border:1px solid #ece8fa;border-radius:11px;
+  margin-top:10px;padding:14px;background:#fff;border:1px solid var(--line);border-radius:var(--radius);
   font-size:13.5px;line-height:1.9;color:var(--ink);max-height:320px;overflow-y:auto;white-space:pre-wrap;
 }
-/* 关键字检测 */
+
+/* ---------- 关键字检测 ---------- */
 .gjk-out{
-  margin-top:10px;padding:14px;background:#faf9ff;border:1px solid #ece8fa;border-radius:11px;
+  margin-top:10px;padding:14px;background:#fff;border:1px solid var(--line);border-radius:var(--radius);
   font-size:13.5px;line-height:2;color:var(--ink);max-height:340px;overflow-y:auto;white-space:pre-wrap;word-break:break-word;
 }
-.gjk-out mark{background:#ffe0e6;color:#c02040;padding:1px 3px;border-radius:4px;font-weight:600}
-/* Emoji */
+.gjk-out mark{background:#ffe0e6;color:#c02040;padding:1px 3px;font-weight:600}
+
+/* ---------- Emoji ---------- */
 .emj-grid{
   display:grid;grid-template-columns:repeat(auto-fill,minmax(44px,1fr));gap:6px;margin-top:10px;
   max-height:380px;overflow-y:auto;padding:4px;
 }
 .emj-grid button{
-  aspect-ratio:1;border:1px solid var(--line);background:#fff;border-radius:10px;
+  aspect-ratio:1;border:1px solid var(--line);background:#fff;border-radius:var(--radius);
   font-size:23px;cursor:pointer;transition:.12s;display:flex;align-items:center;justify-content:center;
 }
-.emj-grid button:hover{border-color:var(--p);background:#f3efff;transform:scale(1.1)}
-footer{border-top:1px solid var(--line);background:#fff;padding:20px 0 32px;margin-top:10px}
-footer .wrap{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;font-size:12.5px;color:var(--ink3)}
-.badges{display:flex;gap:8px;flex-wrap:wrap}
-.badge{background:#f0ecff;color:var(--p2);border-radius:999px;padding:3px 11px;font-size:11.5px;font-weight:600}
-.promo{background:linear-gradient(135deg,#f0ecff,#f6f5fb);border:1px solid #ddd5f8;border-radius:var(--r);
-  padding:13px 16px;margin-bottom:14px;font-size:13px;color:var(--ink2)}
-.promo b{color:var(--ink)}
-/* 工具搜索 */
-.toolsearch{display:flex;align-items:center;gap:8px;margin:12px 0 2px}
-.toolsearch input{
-  flex:1;min-width:0;border:1px solid var(--line);border-radius:999px;padding:9px 16px;font-size:14px;
-  background:#fff;color:var(--ink);font-family:inherit}
-.toolsearch input:focus{outline:none;border-color:var(--p);box-shadow:0 0 0 3px rgba(124,92,224,.12)}
-.toolcount{font-size:12px;color:var(--ink3);flex:none;min-width:56px;text-align:right}
-nav button.hide{display:none}
-nav .nomatch{display:none;font-size:13px;color:var(--ink3);padding:12px 4px}
-nav.filtering .nomatch{display:block}
-/* 跨站导流 */
+.emj-grid button:hover{border-color:var(--accent);background:var(--accent-dim);transform:scale(1.1)}
+
+/* ---------- 跨站导流（极简文字链接） ---------- */
 .crossnav{
-  display:flex;flex-wrap:wrap;align-items:center;gap:8px;
-  background:#fff;border:1px solid var(--line);border-radius:var(--r);
-  padding:11px 14px;margin-bottom:14px;
+  display:flex;flex-wrap:wrap;gap:16px;align-items:center;
+  background:#fff;border:1px solid var(--line);border-radius:var(--radius);
+  padding:12px 16px;margin-bottom:14px;font-size:13px;
 }
-.cn-lab{font-size:12px;color:var(--ink3);font-weight:600;flex:none}
-.cn-item{
-  display:inline-flex;align-items:center;gap:5px;text-decoration:none;
-  font-size:12.5px;color:var(--ink2);background:#f6f4fd;border:1px solid #e6e0f8;
-  border-radius:999px;padding:5px 12px;font-weight:600;transition:.15s;
-}
-.cn-item:hover{border-color:var(--p);color:var(--p);background:#f0ecff}
-.cn-item b{font-weight:700}
-.cn-home{background:#eef5ff;border-color:#d5e5fd}
-.cn-home:hover{border-color:var(--blue);color:var(--blue2);background:#e4efff}
+.crossnav a{color:var(--ink2);text-decoration:none;font-weight:500}
+.crossnav a:hover{color:var(--accent)}
+.crossnav .cn-lab{color:var(--ink3);font-size:12px}
+.crossnav .cn-sep{color:var(--line)}
+
+/* ---------- 页脚 ---------- */
+footer{border-top:1px solid var(--line);background:#fff;padding:24px 0 32px;margin-top:48px}
+footer .wrap{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+footer a{color:var(--ink2);text-decoration:none;font-size:13px}
+footer a:hover{color:var(--accent)}
+footer .copy{font-size:12px;color:var(--ink3)}
+
 @media(max-width:560px){
-  .hd .pc{display:none}
-  nav button{padding:7px 12px;font-size:13px}
-  .crossnav{gap:6px;padding:10px 12px}
-  .cn-lab{width:100%}
+  .top .pc{display:none}
+  nav button{padding:7px 10px;font-size:12.5px}
+  .card{padding:16px}
+  .crossnav{gap:10px}
+  .crossnav .cn-lab{width:100%}
 }
+
 </style>
 </head>
 <body>
 
-<header>
-  <div class="wrap hd">
-    <div class="logo">🧰</div>
+<div class="top">
+  <div class="wrap">
+    <span class="mk"><svg viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="14" fill="#1a1a1a"/><path d="M6 16c0-4.4 4-8 10-8s10 3.6 10 8-4 8-10 8-10-3.6-10-8z" stroke="#fff" stroke-width="1.5"/><circle cx="12" cy="13" r="1" fill="#fff"/></svg></span>
     <b>实用小工具集</b>
-    <span class="tag">全免费</span>
-    <span class="pc">本地运行 · 不上传 · 无限次使用</span>
+    <span class="pc">浏览器本地处理</span>
   </div>
-</header>
+</div>
 
 <main class="wrap">
   <div class="toolsearch">
-    <input type="search" id="tool-q" placeholder="🔍 搜工具：压缩 / 二维码 / base64 / 单位换算…" autocomplete="off">
+    <input type="search" id="tool-q" placeholder="输入工具名称或关键词……" autocomplete="off">
     <span id="tool-count" class="toolcount"></span>
   </div>
   <nav id="tool-nav">
-    <button class="on" data-t="all" data-k="全部 功能 总览 列表 所有 工具">📋 全部工具</button>
-    <button data-t="qr" data-k="二维码 qr code 生成 名片">📱 二维码</button>
-    <button data-t="text" data-k="文本 text 去重 排序 大小写">📝 文本处理</button>
+    <button class="on" data-t="all" data-k="全部 功能 总览 列表 所有 工具">全部工具</button>
+    <button data-t="qr" data-k="二维码 qr code 生成 名片">二维码</button>
+    <button data-t="text" data-k="文本 text 去重 排序 大小写">文本处理</button>
     <button data-t="json" data-k="json 格式化 压缩 校验">{} JSON</button>
-    <button data-t="b64" data-k="base64 编码 解码 加密">🔡 Base64</button>
-    <button data-t="url" data-k="url encode decode 转义 链接">🔗 URL</button>
+    <button data-t="b64" data-k="base64 编码 解码 加密">Base64</button>
+    <button data-t="url" data-k="url encode decode 转义 链接">URL</button>
     <button data-t="hash" data-k="哈希 hash md5 sha 摘要">#️⃣ 哈希</button>
-    <button data-t="cnt" data-k="字数 统计 字符 中文 单词">🔢 字数统计</button>
-    <button data-t="color" data-k="颜色 color 取色 调色 hex rgb">🎨 颜色</button>
-    <button data-t="ts" data-k="时间戳 timestamp 时间 转换">⏰ 时间戳</button>
-    <button data-t="pwd" data-k="密码 生成 随机 安全 强度">🔐 密码</button>
-    <button data-t="unit" data-k="单位 换算 长度 重量 温度">📏 单位</button>
+    <button data-t="cnt" data-k="字数 统计 字符 中文 单词">字数统计</button>
+    <button data-t="color" data-k="颜色 color 取色 调色 hex rgb">颜色</button>
+    <button data-t="ts" data-k="时间戳 timestamp 时间 转换">时间戳</button>
+    <button data-t="pwd" data-k="密码 生成 随机 安全 强度">密码</button>
+    <button data-t="unit" data-k="单位 换算 长度 重量 温度">单位</button>
     <button data-t="pct" data-k="百分比 占比 增长率 计算">％ 百分比</button>
-    <button data-t="cv" data-k="校验 验证 校验位 内容 类型">✅ 格式校验</button>
-    <button data-t="img" data-k="图片 压缩 尺寸 体积 改大小">🖼 图片压缩</button>
-    <button data-t="date" data-k="日期 计算 相差 天数 工作日">📅 日期计算</button>
-    <button data-t="sc" data-k="简繁 简体 繁体 转换 中文">🈶 简繁转换</button>
-    <button data-t="morse" data-k="摩斯 morse 电码">📡 摩斯密码</button>
-    <button data-t="fmt" data-k="代码 格式 美化 json js css">🧹 代码格式</button>
-    <button data-t="name" data-k="命名 风格 驼峰 下划线 常量">🔤 命名转换</button>
-    <button data-t="zs" data-k="生肖 属相 年份 农历">🐲 生肖星座</button>
-    <button data-t="rt" data-k="比例 换算 缩放 尺寸 分辨率">⚖️ 比例换算</button>
-    <button data-t="rand" data-k="抽签 随机 抽取 名单">🎲 随机抽签</button>
-    <button data-t="rn" data-k="随机数 范围 生成">🎯 随机数</button>
-    <button data-t="idcard" data-k="身份证 校验 归属地 性别 生日">🆔 身份证</button>
-    <button data-t="calc" data-k="计算器 算术 四则 科学 计算">🧮 计算器</button>
-    <button data-t="diff" data-k="文本 对比 差异 diff 比较">🔍 文本对比</button>
-    <button data-t="cvt" data-k="json csv 表格 互转 转换">🔁 JSON⇄CSV</button>
+    <button data-t="cv" data-k="校验 验证 校验位 内容 类型">格式校验</button>
+    <button data-t="img" data-k="图片 压缩 尺寸 体积 改大小">图片压缩</button>
+    <button data-t="date" data-k="日期 计算 相差 天数 工作日">日期计算</button>
+    <button data-t="sc" data-k="简繁 简体 繁体 转换 中文">简繁转换</button>
+    <button data-t="morse" data-k="摩斯 morse 电码">摩斯密码</button>
+    <button data-t="fmt" data-k="代码 格式 美化 json js css">代码格式</button>
+    <button data-t="name" data-k="命名 风格 驼峰 下划线 常量">命名转换</button>
+    <button data-t="zs" data-k="生肖 属相 年份 农历">生肖星座</button>
+    <button data-t="rt" data-k="比例 换算 缩放 尺寸 分辨率">比例换算</button>
+    <button data-t="rand" data-k="抽签 随机 抽取 名单">随机抽签</button>
+    <button data-t="rn" data-k="随机数 范围 生成">随机数</button>
+    <button data-t="idcard" data-k="身份证 校验 归属地 性别 生日">身份证</button>
+    <button data-t="calc" data-k="计算器 算术 四则 科学 计算">计算器</button>
+    <button data-t="diff" data-k="文本 对比 差异 diff 比较">文本对比</button>
+    <button data-t="cvt" data-k="json csv 表格 互转 转换">JSON⇄CSV</button>
     <button data-t="md5" data-k="md5 摘要 校验 文件">#️⃣ MD5</button>
-    <button data-t="lt" data-k=" Lorem 占位 假文 测试 数据">📄 假文生成</button>
-    <button data-t="gjk" data-k="关键字 敏感词 违禁 过滤 检测">🚫 关键字检测</button>
-    <button data-t="emj" data-k="emoji 表情 符号 复制 选择">😀 Emoji</button>
+    <button data-t="lt" data-k=" Lorem 占位 假文 测试 数据">假文生成</button>
+    <button data-t="gjk" data-k="关键字 敏感词 违禁 过滤 检测">关键字检测</button>
+    <button data-t="emj" data-k="emoji 表情 符号 复制 选择">Emoji</button>
   </nav>
 
-  <div class="promo">🔒 所有工具都在<b>你的浏览器里</b>运行，输入的内容不会发送到任何服务器。不用注册、不限次数、完全免费。</div>
+  <div class="promo">所有工具都在<b>你的浏览器里</b>运行，输入的内容不会发送到任何服务器。不用注册、不限次数、完全免费。</div>
 
   <div class="crossnav">
     <span class="cn-lab">需要别的？</span>
-    <a class="cn-item" href="https://lsj666nsyw.github.io/whale-batch/">📦 图片/PDF/表格<b>批量处理</b></a>
-    <a class="cn-item" href="https://lsj666nsyw.github.io/office-tools/">🏢 Word/水印/数据清洗<b>办公工具箱</b></a>
+    <a class="cn-item" href="https://lsj666nsyw.github.io/whale-batch/">图片/PDF/表格<b>批量处理</b></a>
+    <a class="cn-item" href="https://lsj666nsyw.github.io/office-tools/">Word/水印/数据清洗<b>办公工具箱</b></a>
     <a class="cn-item cn-home" href="https://lsj666nsyw.github.io/whale-home/">🐋 全部工具<b>总入口</b></a>
   </div>
 
   <!-- ========== 全部工具总览 ========== -->
   <section id="t-all" class="on">
     <div class="card">
-      <h3>📋 全部工具（<span id="all-count">0</span> 个）</h3>
+      <h3>全部工具（<span id="all-count">0</span> 个）</h3>
       <div class="hint">按使用频率排序，点卡片直接打开。也可以在上方搜索框输入关键词。</div>
       <div class="grid-tools" id="all-grid"></div>
     </div>
@@ -689,7 +747,7 @@ nav.filtering .nomatch{display:block}
   <!-- ========== 25. 计算器 ========== -->
   <section id="t-calc">
     <div class="card">
-      <h3>🧮 计算器</h3>
+      <h3>计算器</h3>
       <div class="hint">支持四则运算、括号、百分比、幂、开方、三角函数。点历史记录可回填。</div>
       <input type="text" id="calc-expr" placeholder="例如 (12+8)*3.5-20%" autocomplete="off" spellcheck="false">
       <div class="calc-pad" id="calc-pad"></div>
@@ -707,7 +765,7 @@ nav.filtering .nomatch{display:block}
   <!-- ========== 26. 文本对比 ========== -->
   <section id="t-diff">
     <div class="card">
-      <h3>🔍 文本对比</h3>
+      <h3>文本对比</h3>
       <div class="hint">逐行比较两段文本的差异：新增、删除、相同一目了然</div>
       <div class="diff-cols">
         <textarea id="diff-a" rows="9" placeholder="原始文本 A（每行一条）"></textarea>
@@ -727,7 +785,7 @@ nav.filtering .nomatch{display:block}
   <!-- ========== 27. JSON ⇄ CSV ========== -->
   <section id="t-cvt">
     <div class="card">
-      <h3>🔁 JSON ⇄ CSV 互转</h3>
+      <h3>JSON ⇄ CSV 互转</h3>
       <div class="hint">对象数组转 CSV（带表头），或把 CSV 转回 JSON。适合整理接口数据、导表格。</div>
       <div class="opt">
         <div class="seg" id="cvt-mode">
@@ -769,7 +827,7 @@ nav.filtering .nomatch{display:block}
   <!-- ========== 29. Lorem 假文 ========== -->
   <section id="t-lt">
     <div class="card">
-      <h3>📄 Lorem 假文生成</h3>
+      <h3>Lorem 假文生成</h3>
       <div class="hint">生成占位文本，用于设计稿排版、测试数据填充</div>
       <div class="opt">
         <label>类型</label>
@@ -794,7 +852,7 @@ nav.filtering .nomatch{display:block}
   <!-- ========== 30. 关键字检测 ========== -->
   <section id="t-gjk">
     <div class="card">
-      <h3>🚫 关键字 / 敏感词检测</h3>
+      <h3>关键字 / 敏感词检测</h3>
       <div class="hint">批量检测文本里是否含有关键字，标红并计数。适合内容审核、合规自查。</div>
       <div class="opt">
         <textarea id="gjk-keys" rows="3" placeholder="关键字列表，每行一个或用逗号分隔&#10;例如：&#10;免费&#10;最强,第一"></textarea>
@@ -816,7 +874,7 @@ nav.filtering .nomatch{display:block}
   <!-- ========== 31. Emoji 选择器 ========== -->
   <section id="t-emj">
     <div class="card">
-      <h3>😀 Emoji 表情选择器</h3>
+      <h3>Emoji 表情选择器</h3>
       <div class="hint">点表情即可复制。按分类筛选，搜索关键词。</div>
       <div class="opt">
         <input type="text" id="emj-q" placeholder="搜索：笑脸 / 心 / 动物 / 食物…" style="flex:1">
