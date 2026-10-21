@@ -40,7 +40,7 @@ const ck = (n, c, d) => {
   const allBtns = () => [...navBox.querySelectorAll("button[data-t]")];
   const visible = () => allBtns().filter((b) => !b.classList.contains("hide"));
 
-  const TOTAL = navAll.length; // 31 个工具 + 1 个「全部工具」入口
+  const TOTAL = allBtns().length; // 31 个工具 + 1 个「全部工具」入口
   console.log("[初始状态]");
   ck("搜索框存在", !!$("tool-q"));
   ck(`${TOTAL} 个导航全部可见`, visible().length === TOTAL, visible().length);
