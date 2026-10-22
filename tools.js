@@ -53,6 +53,34 @@
     });
   }
 
+
+  // ===================== URL hash 直达（点进来就出现对应功能） =====================
+  // 规则：#计算器 / #calc 都能打开计算器；进入页面与站内改 hash 都会应用。
+  function applyHash() {
+    var raw = (location.hash || "").replace(/^#/, "");
+    if (!raw) return false;
+    var q;
+    try { q = decodeURIComponent(raw).trim().toLowerCase(); } catch (e) { q = raw.trim().toLowerCase(); }
+    if (!q) return false;
+    var box = document.querySelector("#tool-nav");
+    if (!box) return false;
+    var hit = null;
+    Array.prototype.forEach.call(box.querySelectorAll('button[data-t]'), function (b) {
+      if (hit) return;
+      // 1) data-t 精确匹配
+      if ((b.dataset.t || "").toLowerCase() === q) { hit = b; return; }
+      // 2) 按钮文字去空格后包含匹配（"图片压缩" vs "#图片"）
+      var label = (b.textContent || "").trim().toLowerCase().replace(/\s+/g, "");
+      if (label && (label === q.replace(/\s+/g, "") || label.indexOf(q.replace(/\s+/g, "")) !== -1)) hit = b;
+    });
+    if (!hit) return false;
+    hit.click();
+    var sec = document.getElementById("t-" + hit.dataset.t);
+    if (sec && typeof sec.scrollIntoView === "function") sec.scrollIntoView({ block: "start", behavior: "smooth" });
+    return true;
+  }
+  window.addEventListener("hashchange", applyHash);
+
   // ===================== 工具搜索过滤 =====================
   // 24 个工具横排，手机上要找很久；按名称/拼音/关键词过滤
   (function () {
@@ -503,4 +531,5 @@
       setTimeout(function () { t.textContent = old; }, 900);
     }
   });
+  applyHash();
 })();
